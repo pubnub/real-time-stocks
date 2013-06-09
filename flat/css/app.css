@@ -1,0 +1,89 @@
+/* ======================================================================= */
+/* HEADER
+/* ======================================================================= */
+header {
+    text-align: center;
+    background-color: #111;
+    color: #fff;
+}
+.header {
+    text-align: center;
+    font-size: 60px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 80px;
+}
+.header small {
+    color: rgba(255, 255, 255, 0.5);
+    display: block;
+    font-size: 22px;
+    line-height: 32px;
+    font-weight: 100;
+    letter-spacing: -1px;
+    padding-top: 5px;
+}
+.header-row {
+    margin-bottom: 40px;
+}
+.header-button {
+    margin: 50px 0 10px 132px;
+    width: 200px;
+}
+.header-video {
+    background: white;
+    height: 260px;
+}
+
+
+/* ======================================================================= */
+/* UTILITIES
+/* ======================================================================= */
+.clickable {
+    cursor: pointer;
+}
+.code {
+    font-size: 11px;
+    line-height: 16px;
+}
+.general-description {
+    margin: 20px;
+    height: 60px;
+}
+.span-btn {
+    margin-bottom: 10px;
+}
+.row-margin {
+    margin-bottom: 40px;
+}
+.row-margin-small {
+    margin-bottom: 20px;
+}
+.span-sep {
+    border-right: 1px solid rgba(0,0,0,0.1);
+}
+.float-left {
+    float: left;
+}
+.float-right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.section-margins {
+    margin-bottom: 30px;
+}
+
+.center {
+    text-align: center;
+}
+.right {
+    text-align: right;
+}
+
+/* ======================================================================= */
+/* PANEL: NEW | LOAD
+/* ======================================================================= */
+

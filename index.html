@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Stock & Chat - Powered by PubNub Real-time Network</title>
+    <meta name="viewport" content="width=960, initial-scale=1.0">
+    <link href="flat/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="flat/css/flat-ui.css" rel="stylesheet">
+    <link href="flat/css/app.css" rel="stylesheet">
+    <link rel="shortcut icon" href="images/favicon.ico">
+</head>
+<body>
+
+<!-- ================= -->
+<!-- NAVIGATION HEADER -->
+<!-- ================= -->
+<header class=section-margins><div class="container">
+
+    <!-- NAVIGATION -->
+    <div class="navbar">
+    <div class="navbar-inner">
+    <div class="nav-collapse collapse">
+    <ul class="nav">
+        <li><a href="#link">Stocks and Commodities</a></li>
+        <li><a href="#link">&nbsp;</a></li>
+    </ul></div></div></div>
+    <div class=clear></div>
+
+</div></header>
+
+<!-- ===================== -->
+<!-- PANEL: STOCK TEMPLATE -->
+<!-- ===================== -->
+<script id=stock-template type=text/template>
+    <div class="span2 row-margin-small clickable">
+        <div id="stock-id-{id}" data-on="on" class="tile">
+
+            <h2  id="stock-name-{id}" >{name}</h2>
+            <div id="stock-time-{id}" >{time}</div>
+            <h3  id="stock-price-{id}">{price}</h3>
+            <div id="stock-delta-{id}">{delta}</div>
+            <div id="stock-perc-{id}" >{perc}</div>
+            <h5  id="stock-vol-{id}"  >{vol}</h5>
+
+            <div class="switch has-switch"><div id="stock-switch-{id}" class="switch-on switch-animate"><span class="switch-left">ON</span><label>&nbsp;</label><span class="switch-right">OFF</span></div></div>
+        </div>
+    </div>
+</script>
+
+<!-- ============ -->
+<!-- PANEL: STOCK -->
+<!-- ============ -->
+<div class="container section-margins"><div id=stock-tickers class="row">
+    <div></div>
+</div></div>
+
+
+
+<!-- =================== -->
+<!-- PANEL: INIT EXAMPLE -->
+<!-- =================== -->
+<div class="palette-peter-river">
+<div class=container>
+<div class=panel>
+<div class="row">
+
+    <!-- ==== -->
+    <!-- INIT -->
+    <!-- ==== -->
+    <div class="span6">
+        <div class="palette">
+        <h2>PubNub - Class Instance</h2>
+<pre class="code">
+var pubnub = PUBNUB.init({
+    subscribe_key : 'demo',
+    publish_key   : 'demo'
+});
+</pre></div></div><!-- END INIT -->
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- =========================== -->
+<!-- PANEL: SOURCE CODE EXAMPLES -->
+<!-- =========================== -->
+<div class="palette-orange">
+<div class=container>
+<div class=panel>
+<div class="row">
+
+    <!-- ========= -->
+    <!-- SUBSCRIBE -->
+    <!-- ========= -->
+    <div class="span6">
+        <div class="palette">
+        <h2>PubNub - Open Multiplexed Stream</h2>
+<pre class="code">
+pubnub.subscribe({
+    channel : ['chan1', 'chan2', 'chan3'],
+    message : receiver
+})
+</pre></div></div><!-- END SUBSCRIBE -->
+
+    <!-- =========== -->
+    <!-- UNSUBSCRIBE -->
+    <!-- =========== -->
+    <div class="span6">
+        <div class="palette">
+        <h2>PubNub - Stop One Stream</h2>
+<pre class="code">
+pubnub.unsubscribe({ channel : 'chan1' })
+
+
+
+</pre></div></div><!-- END UNSUBSCRIBE -->
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!-- ====================== -->
+<!-- PANEL: HISTORY EXAMPLE -->
+<!-- ====================== -->
+<div class="palette-sun-flower">
+<div class=container>
+<div class=panel>
+<div class="row">
+
+    <!-- ======= -->
+    <!-- HISTORY -->
+    <!-- ======= -->
+    <div class="span6">
+        <div class="palette">
+        <h2>PubNub - History</h2>
+<pre class="code">
+pubnub.history({
+    limit    : 10,
+    channel  : 'chan1',
+    callback : history_receiver
+})
+
+function history_receiver(messages) {
+    
+}
+</pre></div></div><!-- END HISTORY -->
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!-- =========== -->
+<!-- PANEL: CHAT -->
+<!-- =========== -->
+<div class="palette-asbestos"><div class=container><div class=panel>
+
+    <div class="row row-margin">
+        <div class="span12">
+            <h2>Group Chat</h2>
+            ...
+        </div>
+    </div>
+
+</div></div></div>
+
+
+
+<script src=http://cdn.pubnub.com/pubnub-3.5.1.min.js></script>
+<script src=app.js></script>
+</body>
+</html>
+
