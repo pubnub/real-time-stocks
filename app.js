@@ -57,17 +57,15 @@ function update_stock( data, env, ticker ) {
         stock['vol']    = pubnub.$('stock-vol-'    + ticker);
         stock['switch'] = pubnub.$('stock-switch-' + ticker);
 
-        console.log("stock['time']",stock['time']);
-
         // Add Flipswitch
         flipswitch( ticker, function( on, off ) {
-            //....
-            console.log( on, off );
+            console.log( on, off, ticker );
+            if (on)  start_stream(ticker);
+            if (off) stop_stream(ticker)
         } );
 
         // Return References
         return stock;
-
     })();
 
     // Update UIstock
@@ -75,7 +73,6 @@ function update_stock( data, env, ticker ) {
 }
 
 function update_stock_display( data, stock ) {
-    console.log('( data, stock )', data, stock );
     stock['time'].innerHTML  = data.time;
     stock['price'].innerHTML = data.price; 
     stock['delta'].innerHTML = data.delta;
@@ -89,12 +86,9 @@ function update_stock_display( data, stock ) {
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 function flipswitch( id, callback ) {
-    console.log('id',id);
-
     var ticker        = pubnub.$('stock-id-' + id)
     ,   ticker_switch = pubnub.$('stock-switch-' + id)
 
-    console.log('ticker',ticker);
     pubnub.bind( 'mousedown,touchstart', ticker, function() {
         var on        = pubnub.attr( ticker, 'data-on' )
         ,   state     = on=='on'
@@ -109,7 +103,7 @@ function flipswitch( id, callback ) {
         ticker_switch.className = classname;
 
         // Run User Callback
-        callback( state, !state );
+        callback( !state, state );
 
         return false;
     } );
@@ -127,9 +121,18 @@ function start_stream(id) {
     })
 }
 
+function stop_stream(id) {
+    console.log( 'stop_stream(id)', id );
+    console.log( 'stop_stream(id)', id );
+    pubnub.unsubscribe({ channel : id })
+}
 
 
-
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// 
+// General Utility Functions
+// 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 function first_div(elm) { return elm.getElementsByTagName('div')[0] }
 
 })();
