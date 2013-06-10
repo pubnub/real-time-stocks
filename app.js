@@ -22,7 +22,23 @@ var pubnub         = PUBNUB.init({
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 start_stream(pubnub.uuid().slice(-4));
-start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA');
+
+// Preload
+pubnub.history({
+    channel  : 'stockblast',
+    callback : function(msgs) {
+        try       { start_stream(msgs[0]) }
+        catch (e) {
+            start_stream(
+                'BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,'+
+                'ORCL,TRI,YHOO,ZNGA,AAPL'
+            );
+        }
+    }
+});
+
+// Demo Usage
+//start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA,AAPL');
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // 
@@ -38,6 +54,7 @@ start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA');
 
     var input   = pubnub.$('chat-input')
     ,   output  = pubnub.$('chat-output')
+    ,   cname   = pubnub.$('chat-name')
     ,   channel = 'stock-chat';
 
     // Send Chat Message
@@ -47,6 +64,7 @@ start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA');
         return pubnub.publish({
             channel : channel,
             message : {
+                name : clean(cname.value),
                 text : clean(input.value),
                 time : date_out()
             },
@@ -56,8 +74,18 @@ start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA');
 
     // Append Chat Message
     function chat(message) {
+        // Default Name
+        if (!('name' in message)) message.name = "Robert";
+        message.name = message.name.slice( 0, 10 );
+
+        // Clean Precaution
+        message.text = clean(message.text);
+
+        // Ouptut to Screen
         output.innerHTML = pubnub.supplant(
-            "<strong>{time}</strong> {text}<br>", message
+            "<strong class=chat-time>{time}</strong> "+
+            "<strong class=chat-name>( {name} )</strong> | &nbsp;"+
+            "{text}<br>", message
         ) + output.innerHTML;
     }
 
@@ -65,7 +93,7 @@ start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA');
     function connect() {
         pubnub.history({
             channel  : channel,
-            limit    : 10,
+            limit    : 50,
             callback : function(msgs) {
                 if (msgs.length > 1)
                     pubnub.each( msgs[0], chat );
