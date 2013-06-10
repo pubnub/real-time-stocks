@@ -73,11 +73,17 @@ function update_stock( data, env, ticker ) {
 }
 
 function update_stock_display( data, stock ) {
+    var delta = data.delta;
+
     stock['time'].innerHTML  = data.time;
-    stock['price'].innerHTML = data.price; 
-    stock['delta'].innerHTML = data.delta;
-    stock['perc'].innerHTML  = data.perc;
-    stock['vol'].innerHTML   = data.vol;
+    stock['price'].innerHTML = "$"+data.price; 
+    stock['delta'].innerHTML = (delta > 0 ? "+" : "") + delta;
+    stock['perc'].innerHTML  = "("+data.perc+"%)";
+    stock['vol'].innerHTML   = "Vol: " + data.vol;
+
+    pubnub.css( stock['box'], {
+        background : data.price > 0 ? "#2ecc71" : "#e74c3c"
+    } );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -122,11 +128,30 @@ function start_stream(id) {
 }
 
 function stop_stream(id) {
-    console.log( 'stop_stream(id)', id );
-    console.log( 'stop_stream(id)', id );
+    pubnub.css( pubnub.$("stock-id-"+id), { background : "#ecf0f1" } );
     pubnub.unsubscribe({ channel : id })
 }
 
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// 
+// Load History Example Code
+// 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+var load_history_btn = pubnub.$('load-history-example')
+,   history_out      = pubnub.$('output-history-example');
+
+pubnub.bind( 'mousedown,touchstart', load_history_btn, function() {
+    pubnub.history({
+        limit    : 5,
+        channel  : 'MSFT',
+        callback : function(msgs) {
+            history_out.innerHTML = JSON.stringify(msgs[0]);
+        }
+    });
+
+    return false;
+} );
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // 

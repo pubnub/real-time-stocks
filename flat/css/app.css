@@ -34,10 +34,17 @@ header {
     height: 260px;
 }
 
+#stock-tickers {
+    min-height: 540px;
+}
+
 
 /* ======================================================================= */
 /* UTILITIES
 /* ======================================================================= */
+.output-history-example-margin {
+    margin: 10px;
+}
 .clickable {
     cursor: pointer;
 }
@@ -81,6 +88,19 @@ header {
 }
 .right {
     text-align: right;
+}
+.animate {
+    -webkit-transition: all 0.5s;
+    -moz-transition:    all 0.5s;
+    -ms-transition:     all 0.5s;
+    -o-transition:      all 0.5s;
+    transition:         all 0.5s;
+
+    -webkit-transition-timing-function: ease-in-out;
+    -moz-transition-timing-function:    ease-in-out;
+    -ms-transition-timing-function:     ease-in-out;
+    -o-transition-timing-function:      ease-in-out;
+    transition-timing-function:         ease-in-out;
 }
 
 /* ======================================================================= */

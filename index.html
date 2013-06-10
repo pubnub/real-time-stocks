@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Stock & Chat - Powered by PubNub Real-time Network</title>
+    <title>
+        Real-Time Financial Dashboard & Chat -
+        Powered by PubNub Real-time Network
+    </title>
     <meta name="viewport" content="width=960, initial-scale=1.0">
     <link href="flat/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="flat/css/flat-ui.css" rel="stylesheet">
@@ -21,7 +24,7 @@
     <div class="navbar-inner">
     <div class="nav-collapse collapse">
     <ul class="nav">
-        <li><a href="#link">Stocks and Commodities</a></li>
+        <li><a href="#link">Real-Time Financial Dashboard & Chat</a></li>
         <li><a href="#link">&nbsp;</a></li>
     </ul></div></div></div>
     <div class=clear></div>
@@ -33,14 +36,20 @@
 <!-- ===================== -->
 <script id=stock-template type=text/template>
     <div class="span2 row-margin-small clickable">
-        <div id="stock-id-{id}" data-on="on" class="tile">
+        <div id="stock-id-{id}" data-on="on" class="tile animate">
 
-            <h2  id="stock-name-{id}" >{name}</h2>
-            <div id="stock-time-{id}" >{time}</div>
-            <h3  id="stock-price-{id}">{price}</h3>
-            <div id="stock-delta-{id}">{delta}</div>
-            <div id="stock-perc-{id}" >{perc}</div>
-            <h5  id="stock-vol-{id}"  >{vol}</h5>
+            <div id="stock-values-{id}">
+                <h2  id="stock-name-{id}" >{name}</h2>
+                <h4  id="stock-price-{id}">{price}</h4>
+                <div id="stock-delta-{id}">{delta}</div>
+                <div id="stock-perc-{id}" >{perc}</div>
+
+                <div>&nbsp;</div>
+
+                <div  id="stock-price-lt" ><strong>Last Trade</strong></div>
+                <div id="stock-time-{id}" >{time}</div>
+                <h5  id="stock-vol-{id}"  >{vol}</h5>
+            </div>
 
             <div class="switch has-switch"><div id="stock-switch-{id}" class="switch-on switch-animate"><span class="switch-left">ON</span><label>&nbsp;</label><span class="switch-right">OFF</span></div></div>
         </div>
@@ -140,15 +149,33 @@ pubnub.unsubscribe({ channel : 'chan1' })
         <h2>PubNub - History</h2>
 <pre class="code">
 pubnub.history({
-    limit    : 10,
+    limit    : 5,
     channel  : 'chan1',
     callback : history_receiver
 })
 
 function history_receiver(messages) {
-    
+    log_messages(messages);
 }
 </pre></div></div><!-- END HISTORY -->
+
+
+    <div class="span6"><div class="palette">
+        <h2>History Example</h2>
+
+        <!-- HISTORY BUTTON EXAMPLE -->
+        <div class="share mrl">
+            <div class="output-history-example-margin">&nbsp;
+            <div id="output-history-example"
+                 class="code"
+                 style="color:#55555e"
+            ></div></div>
+            <a href="#history"
+               id="load-history-example"
+               class="btn btn-primary btn-block btn-large"
+           >Load History</a>
+      </div>
+    </div></div>
 
 </div>
 </div>
