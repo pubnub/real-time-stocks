@@ -63,6 +63,14 @@ start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA');
 
     // On Connect we can Load History
     function connect() {
+        pubnub.history({
+            channel  : channel,
+            limit    : 10,
+            callback : function(msgs) {
+                if (msgs.length > 1)
+                    pubnub.each( msgs[0], chat );
+            }
+        })
     }
 
     // Receive Chat Message

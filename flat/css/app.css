@@ -46,6 +46,9 @@ header {
     color: #fff;
     border-left: 1px solid #7f8c8d;
     padding-left: 20px;
+    height: 160px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 .output-history-example-margin {
     margin: 10px;
