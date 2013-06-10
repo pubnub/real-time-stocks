@@ -64,6 +64,32 @@
 </div></div>
 
 
+<!-- =========== -->
+<!-- PANEL: CHAT -->
+<!-- =========== -->
+<div class="palette-silver"><div class=container><div class=panel>
+
+    <div class="row"><div class="span3">
+        <h2>Group Chat</h2>
+    </div></div>
+    <div class="row row-margin">
+        <div class="span3">
+            <input type="text"
+                   id="chat-input"
+                   value=""
+                   placeholder="Chat Here"
+                   class="span3">
+        </div>
+        <div id="chat-output" class="span8">
+            <strong>10:10am</strong> This alskjdfla<br>
+            <strong>10:10am</strong> This alskjdfla<br>
+            <strong>10:10am</strong> This alskjdfla<br>
+        </div>
+    </div>
+
+</div></div></div>
+
+
 
 <!-- =================== -->
 <!-- PANEL: INIT EXAMPLE -->
@@ -108,7 +134,7 @@ var pubnub = PUBNUB.init({
         <h2>PubNub - Open Multiplexed Stream</h2>
 <pre class="code">
 pubnub.subscribe({
-    channel : ['chan1', 'chan2', 'chan3'],
+    channel : ['MSFT', 'YHOO', 'ORCL'],
     message : receiver
 })
 </pre></div></div><!-- END SUBSCRIBE -->
@@ -120,7 +146,7 @@ pubnub.subscribe({
         <div class="palette">
         <h2>PubNub - Stop One Stream</h2>
 <pre class="code">
-pubnub.unsubscribe({ channel : 'chan1' })
+pubnub.unsubscribe({ channel : 'MSFT' })
 
 
 
@@ -130,7 +156,6 @@ pubnub.unsubscribe({ channel : 'chan1' })
 </div>
 </div>
 </div>
-
 
 
 <!-- ====================== -->
@@ -150,7 +175,7 @@ pubnub.unsubscribe({ channel : 'chan1' })
 <pre class="code">
 pubnub.history({
     limit    : 5,
-    channel  : 'chan1',
+    channel  : 'MSFT',
     callback : history_receiver
 })
 
@@ -182,21 +207,6 @@ function history_receiver(messages) {
 </div>
 </div>
 
-
-
-<!-- =========== -->
-<!-- PANEL: CHAT -->
-<!-- =========== -->
-<div class="palette-asbestos"><div class=container><div class=panel>
-
-    <div class="row row-margin">
-        <div class="span12">
-            <h2>Group Chat</h2>
-            ...
-        </div>
-    </div>
-
-</div></div></div>
 
 
 

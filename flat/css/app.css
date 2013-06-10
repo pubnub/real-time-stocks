@@ -42,6 +42,11 @@ header {
 /* ======================================================================= */
 /* UTILITIES
 /* ======================================================================= */
+#chat-output {
+    color: #fff;
+    border-left: 1px solid #7f8c8d;
+    padding-left: 20px;
+}
 .output-history-example-margin {
     margin: 10px;
 }

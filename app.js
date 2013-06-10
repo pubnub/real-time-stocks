@@ -9,7 +9,8 @@ var stocks         = {}
 ,   stock_tickers  = PUBNUB.$("stock-tickers")
 ,   stock_template = PUBNUB.$("stock-template").innerHTML;
 var pubnub         = PUBNUB.init({
-    windowing     : 1000,
+    windowing     : 200,
+    timeout       : 2000,
     subscribe_key : 'demo',
     publish_key   : 'demo'
 });
@@ -22,6 +23,61 @@ var pubnub         = PUBNUB.init({
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 start_stream(pubnub.uuid().slice(-4));
 start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA');
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// 
+// Chat
+// 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+(function(){
+
+    var pubnub  = PUBNUB.init({
+        subscribe_key : 'demo',
+        publish_key   : 'demo'
+    });
+
+    var input   = pubnub.$('chat-input')
+    ,   output  = pubnub.$('chat-output')
+    ,   channel = 'stock-chat';
+
+    // Send Chat Message
+    function send() {
+        if (!input.value) return;
+
+        return pubnub.publish({
+            channel : channel,
+            message : {
+                text : clean(input.value),
+                time : date_out()
+            },
+            x : (input.value='')
+        });
+    }
+
+    // Append Chat Message
+    function chat(message) {
+        output.innerHTML = pubnub.supplant(
+            "<strong>{time}</strong> {text}<br>", message
+        ) + output.innerHTML;
+    }
+
+    // On Connect we can Load History
+    function connect() {
+    }
+
+    // Receive Chat Message
+    pubnub.subscribe({
+        restore  : true,
+        channel  : channel,
+        connect  : connect,
+        callback : chat
+    });
+
+    pubnub.bind( 'keyup', input, function(e) {
+       (e.keyCode || e.charCode) === 13 && send();
+    });
+    
+})();
 
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -82,7 +138,7 @@ function update_stock_display( data, stock ) {
     stock['vol'].innerHTML   = "Vol: " + data.vol;
 
     pubnub.css( stock['box'], {
-        background : data.price > 0 ? "#2ecc71" : "#e74c3c"
+        background : delta > 0 ? "#2ecc71" : "#e74c3c"
     } );
 }
 
@@ -153,11 +209,25 @@ pubnub.bind( 'mousedown,touchstart', load_history_btn, function() {
     return false;
 } );
 
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // 
 // General Utility Functions
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+function clean(text)    { return (''+text).replace( /[<>]/g, '' ) }
 function first_div(elm) { return elm.getElementsByTagName('div')[0] }
+function zeropad(num)   { return (''+num).length > 1 ? ''+num : '0'+num }
+function date_out() {
+    var now = new Date()
+    ,   min = now.getMinutes()
+    ,   hrs = now.getHours();
+
+    return pubnub.supplant( '{hours}:{minutes}<sup>{pmam}</sup>', {
+        hours   : zeropad(hrs > 12 ? (hrs - 12) || 1 : hrs || 1),
+        minutes : zeropad(min),
+        pmam    : hrs > 11 ? 'pm' : 'am'
+    } );
+}
 
 })();
