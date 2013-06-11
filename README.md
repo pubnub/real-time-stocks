@@ -1,13 +1,26 @@
 # Real-time Stocks with PHP and JavaScript
 
 You are looking at a **real-time stock** app that sends data from a
-**PHP Server Script** to an **HTML5 JavaScript** app.
-Data is broadcast from the PHP Server and the HTML5 JavaScript app
+**PHP Server Process** to an **HTML5 JavaScript** app in real-time.
+Stock Quotes are broadcast from the PHP Server 
+into the PubNub Network where the HTML5 JavaScript app
 will receive the **websocket data** and display it in real-time.
 
+This is a brief walkthrough of how we built the Real-time Stock
+Streaming application using PHP and JavaScript leveraging the
+PubNub Real-time Network as the Data Channel broker.
+
+The PHP Process can be run in parallel with other PHP processes
+which allows publishing of real-time quote data into the PubNub Cloud.
+The JavaScript HTML5 App is able to receive a user-selected
+variety of symbols.
+
 Each stock quote symbol may be subscribed individually or as a group.
-This means that you are receiving only the data that you need and
-are interested in, saving on bandwidth.
+This means that you are receiving only the data that you request and
+are interested in, saving on bandwidth and not receiving data that
+you are disinterested in.
+This application would not be possible without PubNub Multiplexing.
+Multiplexing will be covered in the following section.
 
 ![Real-time Stock Feed PHP JavaScript](http://pubnub-demo.s3.amazonaws.com/real-time-stock/real-time-stock-feed-php-javascript.png "Real-time Stock Feed PHP JavaScript")
 
@@ -79,7 +92,6 @@ Note that the lower the `windowing` value the less compression opportunity
 and the higher the value the more latency is allowed for bundled messages
 with high compression ratios.
 The provided numbers above are recommended for streaming stock symbols.
-
 
 ## PHP Server Broadcaster
 
