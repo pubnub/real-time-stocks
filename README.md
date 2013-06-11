@@ -114,10 +114,6 @@ This example launches the stock streamer with default starting values:
  - MAX DELTA PERCENT (before reset):    25
 ```
 
-```php
-screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100 25
-```
-
 This example will launch the PHP process in a screen session which
 starts transmitting randomized variants based on the starting args.
 This is a good starting point for you and easy to see where
