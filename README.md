@@ -136,7 +136,32 @@ This is a simple non-GNU-screen example of running the PHP Process.
 
 ## Server Bootstrapping 
 
+For the server which is providing all the quote streams, you can use
+the `bootstrap.php` file in the `php-broadcaster` directory
+to bootstrap the available symbol streams.
+Just execute the script after you've launched or changed new PHP Streams:
+
+```php
+cd php-broadcaster
+php bootstrap.php
+```
+
+This will look for all running `stock.php` processes and join the result
+into a comma separated list which is published for client HTML5 app
+to bootstrap when it is loaded.
+
+>NOTE: You must have running `stock.php` processes on the same machine.
+
 ## Simple Embedded Chat Application
+
+Also provided here in this stock demo is a basic chat which allows
+you to communicate with a group of collaborators in real-time.
+The chat stream is separate from the stock symbol ticker stream.
+
+![Real-time Stock Feed PHP JavaScript Chat](http://pubnub-demo.s3.amazonaws.com/real-time-stock/real-time-stock-php-javascript-with-chat.png "Real-time Stock Feed PHP JavaScript Chat")
+
+>NOTE: This is a basic chat where you can find the integrated
+source code currently inside `app.js` JavaScript source file.
 
 ## AES256 Cipher Key Cryptography Options
 
