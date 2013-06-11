@@ -4,17 +4,17 @@ require_once('Pubnub.php');
 ## ---------------------------------------------------------------------------
 ## STANDARD USAGE
 ## ---------------------------------------------------------------------------
-## php stock.php <TICKER_ID> <PRICE> <MIN_TRADE> <MAX_TRADE> <VOLATILITY>
+## php stock.php <TICKER_ID> <PRICE> <MIN_TRADE> <MAX_TRADE> <VOLATILITY> <D>
 
 ## ---------------------------------------------------------------------------
 ## EXAMPLE
 ## ---------------------------------------------------------------------------
-## screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100
+## screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100 25
 
 ## ---------------------------------------------------------------------------
 ## PARAMATERS AND SETTINGS
 ## ---------------------------------------------------------------------------
-## screen -d -m -S <TICK> php stock.php <TICK> <PRICE> <MIN> <MAX> <VOL>
+## screen -d -m -S <TICK> php stock.php <TICK> <PRICE> <MIN> <MAX> <VOL> <D>
 
 ## ---------------------------------------------------------------------------
 ## Timezone
@@ -23,10 +23,10 @@ date_default_timezone_set('America/New_York');
 setlocale(LC_MONETARY, "en_US");
 
 ## Capture Publish and Subscribe Keys from Command Line
-$publish_key   = isset($argv[6]) ? $argv[6] : 'demo';
-$subscribe_key = isset($argv[7]) ? $argv[7] : 'demo';
-$secret_key    = isset($argv[8]) ? $argv[8] : false;
-$cipher_key    = isset($argv[9]) ? $argv[9] : false;
+$publish_key   = isset($argv[7]) ? $argv[7]   : 'demo';
+$subscribe_key = isset($argv[8]) ? $argv[8]   : 'demo';
+$secret_key    = isset($argv[9]) ? $argv[9]   : false;
+$cipher_key    = isset($argv[10]) ? $argv[10] : false;
 $ssl_on        = false;
 
 ## ---------------------------------------------------------------------------
@@ -48,6 +48,7 @@ $sPrice     = $argv[2];
 $minTrade   = $argv[3];
 $maxTrade   = $argv[4];
 $volatility = $argv[5];
+$maxDelta   = $argv[6];
 
 echo($channel."\n");
 echo($sPrice."\n");
@@ -89,7 +90,7 @@ while (1) {
     // This is because it is fake data anyway and
     // we want the stock price to run forever
     // randomly in a working demo state.
-    if (abs($perc) > 25) $currPrice = $sPrice;
+    if (abs($perc) > $maxDelta) $currPrice = $sPrice;
     usleep($slptime);
 }
 
