@@ -11,8 +11,40 @@ are interested in, saving on bandwidth.
 
 ![Real-time Stock Feed PHP JavaScript](http://pubnub-demo.s3.amazonaws.com/real-time-stock/real-time-stock-feed-php-javascript.png "Real-time Stock Feed PHP JavaScript")
 
-
 ## Multiplexing
+
+This application heavily utilizes Stream Multiplexing.
+Multiplexing is **vital for any stock/ticker streaming**.
+With Multiplexing your app can efficiently and effectively
+stream many symbols at the same time over a single TCP Socket Connection.
+
+Without Multiplexing capability, streaming data from a group of symbols
+would be impractical and impossible because each symbol would require
+a dedicated TCP Socket which does not scale well.
+
+With the PubNub JavaScript SDK, Multiplexing is always enabled and
+auto-optimizes the connection for each subscription issued.
+
+##### Example Multiplexing Scenario in JavaScript
+
+```javascript
+// Example JavaScript Multiplexing with Three Symbols
+pubnub.subscribe({
+    channel : ['MSFT', 'YHOO', 'ORCL'],
+    message : receiver
+})
+
+// Add Two More Symbols (Automatic Multiplexes into the TCP Stream)
+pubnub.subscribe({
+    channel : ['AAPL', 'F'],
+    message : receiver
+})
+
+// The Receiver Function
+function receiver(update) {
+    console.log(update)
+}
+```
 
 ## Windowing and Gzip Compressing
 
@@ -23,7 +55,7 @@ To get started you'll execute the server logic as follows:
 
 ##### PHP Example with `MSFT` stock
 ```php
-screen -d -m -S bidu php stock.php MSFT 102.67 250000 2500000 100
+screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100
 ```
 
 This example launches the stock streamer with default starting values:
@@ -35,7 +67,7 @@ This example launches the stock streamer with default starting values:
  - VOLATILITY: 100
 
 ```php
-screen -d -m -S bidu php stock.php MSFT 102.67 250000 2500000 100
+screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100
 ```
 
 This example will launch the PHP process in a screen session which
@@ -66,8 +98,10 @@ screen -d -m -S znga php stock.php ZNGA   2.84 250000 2500000 100
 ##### Non-screen Example
 
 ```php
-
+php stock.php GOOG 879.73 250000 2500000 100
 ```
+
+This is a simple non-GNU-screen example of running the PHP Process.
 
 
 ## History
