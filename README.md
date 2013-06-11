@@ -3,7 +3,7 @@
 You are looking at a **real-time stock** app that sends data from a
 **PHP Server Script** to an **HTML5 JavaScript** app.
 Data is broadcast from the PHP Server and the HTML5 JavaScript app
-will receive the data and display it in real-time.
+will receive the **websocket data** and display it in real-time.
 
 Each stock quote symbol may be subscribed individually or as a group.
 This means that you are receiving only the data that you need and
@@ -16,7 +16,8 @@ are interested in, saving on bandwidth.
 This application heavily utilizes Stream Multiplexing.
 Multiplexing is **vital for any stock/ticker streaming**.
 With Multiplexing your app can efficiently and effectively
-stream many symbols at the same time over a single TCP Socket Connection.
+stream many symbols at the same time over a single
+TCP Socket Connection utilizing the **WebSocket Protocol**.
 
 Without Multiplexing capability, streaming data from a group of symbols
 would be impractical and impossible because each symbol would require
@@ -27,26 +28,32 @@ auto-optimizes the connection for each subscription issued.
 
 ##### Example Multiplexing Scenario in JavaScript
 
-```javascript
-// Example JavaScript Multiplexing with Three Symbols
-pubnub.subscribe({
-    channel : ['MSFT', 'YHOO', 'ORCL'],
-    message : receiver
-})
+```html
+<script src="https://cdn.pubnub.com/pubnub-3.5.1.min.js"></script>
+<script>(function(){
+    // Example JavaScript Multiplexing with Three Symbols
+    pubnub.subscribe({
+        channel : ['MSFT', 'YHOO', 'ORCL'],
+        message : receiver
+    })
 
-// Add Two More Symbols (Automatic Multiplexes into the TCP Stream)
-pubnub.subscribe({
-    channel : ['AAPL', 'F'],
-    message : receiver
-})
+    // Add Two More Symbols (Automatic Multiplexes into the TCP Stream)
+    pubnub.subscribe({
+        channel : ['AAPL', 'F'],
+        message : receiver
+    })
 
-// The Receiver Function
-function receiver(update) {
-    console.log(update)
-}
+    // The Receiver Function
+    function receiver(update) {
+        console.log(update)
+    }
+})();</script>
 ```
 
-## Windowing and Gzip Compressing
+## Windowing and Gzip Compression and Tuning
+
+There are two important tuning levers to pull with the
+PubNub JavaScript SDK for improved performance vs reduced bandwidth.
 
 ## PHP Server Broadcaster
 
