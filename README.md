@@ -185,6 +185,16 @@ This application uses a `pubnub.history()` call for several purposes.
 One is to bootstrap the HTML5 client app.
 Another is to load the history of the chat conversations.
 
+## Backfill
+
+This application also demonstrates the capability to opportunistically preload
+a message bundled with most recently streamed symbol updates.
+This is an optimization and also makes it easier to pre-load data from the
+multiplexed stream very quickly rather than waiting for updates
+to piece together the stream one-by-one which causes the UI to stagger for a
+few moments as it builds the display.
+Therefor Backfill is a great optimization in performance and usability!
+
 
 ## Simple Embedded Chat Application
 
