@@ -49,13 +49,13 @@ $minTrade   = $argv[3];
 $maxTrade   = $argv[4];
 $volatility = $argv[5];
 
-echo $channel."\n";
-echo $sPrice."\n";
+echo($channel."\n");
+echo($sPrice."\n");
 
 ## ---------------------------------------------------------------------------
 ## Publish Example
 ## ---------------------------------------------------------------------------
-echo "Running publish\r\n";
+echo("Running publish\r\n");
 
 $currPrice = $sPrice;
 
@@ -66,26 +66,31 @@ while (1) {
     $vol       = (rand(100,1000))*10;
     $currPrice = $currPrice + $change;
     $delta     = $currPrice - $sPrice;
-    $perc      = round((1-($sPrice / $currPrice ))*100,2);
-    $m         = array(
-        "time"  => $now->format ("g:i:sa"),
-        "price" => number_format($currPrice, 2, '.', ''),
-        "delta" => number_format($delta, 2, '.', ''),
-        "perc"  => number_format($perc, 2, '.', ''),
+    $perc      = round( (1 - ($sPrice / $currPrice ) ) * 100, 2 );
+    $stream    = array(
+        "time"  => $now->format("g:i:sa"),
+        "price" => number_format( $currPrice, 2, '.', '' ),
+        "delta" => number_format( $delta,     2, '.', '' ),
+        "perc"  => number_format( $perc,      2, '.', '' ),
         "vol"   => $vol
     );
 
     $publish_success = $pubnub->publish(array(
         'channel' => $channel,
-        'message' => $m));
+        'message' => $stream
+    ));
 
-    echo($t . " " .  $publish_success[0] . " " . $publish_success[1]);
-    echo "\r\n";
+    echo($t . " " . $publish_success[0] . " " . $publish_success[1]);
+    echo("\r\n");
 
-    $slptime=rand($minTrade,$maxTrade);
+    $slptime = rand( $minTrade, $maxTrade );
 
+    // Rest Price if Detla is greater than 25%.
+    // This is because it is fake data anyway and
+    // we want the stock price to run forever
+    // randomly in a working demo state.
+    if (abs($perc) > 25) $currPrice = $sPrice;
     usleep($slptime);
 }
 
 ?>
-

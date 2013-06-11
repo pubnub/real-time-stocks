@@ -21,7 +21,7 @@ TCP Socket Connection utilizing the **WebSocket Protocol**.
 
 Without Multiplexing capability, streaming data from a group of symbols
 would be impractical and impossible because each symbol would require
-a dedicated TCP Socket which does not scale well.
+a dedicated TCP Socket; this does not scale.
 
 With the PubNub JavaScript SDK, Multiplexing is always enabled and
 auto-optimizes the connection for each subscription issued.
@@ -37,23 +37,44 @@ auto-optimizes the connection for each subscription issued.
         message : receiver
     })
 
-    // Add Two More Symbols (Automatic Multiplexes into the TCP Stream)
+    // Add Three More Symbols (Automatic Multiplexes into the TCP Stream)
     pubnub.subscribe({
-        channel : ['AAPL', 'F'],
+        channel : ['AAPL', 'F', 'GOOG'],
         message : receiver
     })
 
     // The Receiver Function
-    function receiver(update) {
-        console.log(update)
-    }
+    function receiver(update) { console.log(update) }
 })();</script>
 ```
 
 ## Windowing and Gzip Compression and Tuning
 
-There are two important tuning levers to pull with the
+There are two important tuning levers available to you with the
 PubNub JavaScript SDK for improved performance vs reduced bandwidth.
+Consider the compression ratio savings to latency opportunity.
+With `windowing` you receive the opportunity to reduce bandwidth consumption
+drastically by allowing message bundling.
+
+This *Bundle of Messages* that is allowed to accumulate on the network buffer
+before the client receives is a good thing as we have the opportunity now to 
+highly compress the data using streaming GZIP.
+This combination of windowing and gzip compressing  provides high throughput
+at low bandwidth costs; saving
+you and your end-consumers a lot of bandwidth.
+
+Here follows the details on how to access this windowing feature
+along with a general expected rate of messages per second.
+
+```javascript
+var pubnub = PUBNUB.init({
+    windowing     : 200,
+    timeout       : 2000,  // Expected to receive at least 1 message
+    subscribe_key : 'demo'
+});
+```
+
+Here is a table of recommended values based on messages per second.
 
 ## PHP Server Broadcaster
 
@@ -67,11 +88,11 @@ screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100
 
 This example launches the stock streamer with default starting values:
 
- - TICKER ID:  MSFT
- - PRICE:      102.67
- - MIN TRADE:  250000
- - MAX TRADE:  250000
- - VOLATILITY: 100
+ - TICKER ID:                           MSFT
+ - PRICE:                               102.67
+ - MIN TRADE FREQUENCY (microseconds):  250000
+ - MAX TRADE FREQUENCY (microseconds):  250000
+ - VOLATILITY:                          100
 
 ```php
 screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100

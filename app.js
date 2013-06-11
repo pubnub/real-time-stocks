@@ -11,8 +11,7 @@ var stocks         = {}
 var pubnub         = PUBNUB.init({
     windowing     : 200,
     timeout       : 2000,
-    subscribe_key : 'demo',
-    publish_key   : 'demo'
+    subscribe_key : 'demo'
 });
 
 
