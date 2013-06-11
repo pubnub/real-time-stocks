@@ -24,6 +24,7 @@ Multiplexing will be covered in the following section.
 
 ![Real-time Stock Feed PHP JavaScript](http://pubnub-demo.s3.amazonaws.com/real-time-stock/real-time-stock-feed-php-javascript.png "Real-time Stock Feed PHP JavaScript")
 
+
 ## Multiplexing
 
 This application heavily utilizes Stream Multiplexing.
@@ -92,6 +93,7 @@ Note that the lower the `windowing` value the less compression opportunity
 and the higher the value the more latency is allowed for bundled messages
 with high compression ratios.
 The provided numbers above are recommended for streaming stock symbols.
+
 
 ## PHP Server Broadcaster
 
@@ -185,6 +187,7 @@ This application uses a `pubnub.history()` call for several purposes.
 One is to bootstrap the HTML5 client app.
 Another is to load the history of the chat conversations.
 
+
 ## Backfill
 
 This application also demonstrates the capability to opportunistically preload
@@ -233,7 +236,12 @@ Here is the full source code for the chat example:
         <!-- CHAT OUTPUT HERE -->
     </div>
 </div>
+```
 
+Followed by the JavaScript code which uses the `id=` fields
+to bind user events and as display output blocks on the screen:
+
+```html
 <script>(function(){
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // Chat
