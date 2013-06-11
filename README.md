@@ -82,7 +82,7 @@ along with a general expected rate of messages per second.
 
 ```javascript
 var pubnub = PUBNUB.init({
-    windowing     : 1000,  // Allow 1 Second to Buffer and Construct a bundle.
+    windowing     : 1000,  // Allow 1 Second to Buffer and Construct each bundle.
     timeout       : 2000,  // Expected to receive at least 1 message each 2 Second.
     subscribe_key : 'demo'
 });
