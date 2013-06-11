@@ -68,8 +68,10 @@ along with a general expected rate of messages per second.
 
 ```javascript
 var pubnub = PUBNUB.init({
-    windowing     : 200,
-    timeout       : 2000,  // Expected to receive at least 1 message
+    windowing     : 1000,  // Allow 1 Second to Buffer and Construct a bundle.
+    timeout       : 2000,  // Expected to receive at least 1 message each 2 Second.
+                           // Do not set lower than 2000.
+                           // You'll hit strange behavior as 2000 is max.
     subscribe_key : 'demo'
 });
 ```
@@ -88,11 +90,13 @@ screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100
 
 This example launches the stock streamer with default starting values:
 
+```
  - TICKER ID:                           MSFT
  - PRICE:                               102.67
  - MIN TRADE FREQUENCY (microseconds):  250000
  - MAX TRADE FREQUENCY (microseconds):  250000
  - VOLATILITY:                          100
+```
 
 ```php
 screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100
@@ -131,10 +135,113 @@ php stock.php GOOG 879.73 250000 2500000 100
 
 This is a simple non-GNU-screen example of running the PHP Process.
 
-
 ## History
 
-## Server Bootstrapping 
+This application uses a `pubnub.history()` call for several purposes.
+One is to bootstrap the HTML5 client app.
+Another is to load the history of the chat data.
+
+Here is the full source code for the chat example:
+
+```html
+<!-- =========== -->
+<!-- PANEL: CHAT -->
+<!-- =========== -->
+<div class="row row-margin">
+    <div class="span9">
+        <input type="text"
+               id="chat-input"
+               value=""
+               placeholder="Chat Here"
+               class="span9">
+    </div>
+    <div class="span3">
+        <input type="text"
+               id="chat-name"
+               value="Todd"
+               class="span2">
+        &nbsp;<span class="fui-user"></span>
+    </div>
+    <div id="chat-output" class="span11">
+        <!-- CHAT OUTPUT HERE -->
+    </div>
+</div>
+
+<script>(function(){
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// Chat
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+var pubnub  = PUBNUB.init({
+    subscribe_key : 'demo',
+    publish_key   : 'demo'
+});
+
+var input   = pubnub.$('chat-input')
+,   output  = pubnub.$('chat-output')
+,   cname   = pubnub.$('chat-name')
+,   channel = 'stock-chat';
+
+// Send Chat Message
+function send() {
+    if (!input.value) return;
+
+    return pubnub.publish({
+        channel : channel,
+        message : {
+            name : clean(cname.value),
+            text : clean(input.value),
+            time : date_out()
+        },
+        x : (input.value='')
+    });
+}
+
+// Append Chat Message
+function chat(message) {
+    // Default Name
+    if (!('name' in message)) message.name = "Robert";
+    message.name = message.name.slice( 0, 10 );
+
+    // Clean Precaution
+    message.text = clean(message.text);
+
+    // Ouptut to Screen
+    output.innerHTML = pubnub.supplant(
+        "<strong class=chat-time>{time}</strong> "+
+        "<strong class=chat-name>( {name} )</strong> | &nbsp;"+
+        "{text}<br>", message
+    ) + output.innerHTML;
+}
+
+// On Connect we can Load History
+function connect() {
+    pubnub.history({
+        channel  : channel,
+        limit    : 50,
+        callback : function(msgs) {
+            if (msgs.length > 1)
+                pubnub.each( msgs[0], chat );
+        }
+    })
+}
+
+// Receive Chat Message
+pubnub.subscribe({
+    channel  : channel,
+    connect  : connect,
+    callback : chat
+});
+
+pubnub.bind( 'keyup', input, function(e) {
+   (e.keyCode || e.charCode) === 13 && send();
+});
+    
+})();</script>
+```
+
+
+## HTML5 Client Bootstrapping 
 
 For the server which is providing all the quote streams, you can use
 the `bootstrap.php` file in the `php-broadcaster` directory

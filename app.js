@@ -36,9 +36,6 @@ pubnub.history({
     }
 });
 
-// Demo Usage
-//start_stream('BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,ORCL,TRI,YHOO,ZNGA,AAPL');
-
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // 
 // Chat
@@ -102,7 +99,6 @@ pubnub.history({
 
     // Receive Chat Message
     pubnub.subscribe({
-        restore  : true,
         channel  : channel,
         connect  : connect,
         callback : chat
@@ -213,8 +209,9 @@ function flipswitch( id, callback ) {
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 function start_stream(id) {
     pubnub.subscribe({
-        channel : id,
-        message : update_stock
+        backfill : true,
+        channel  : id,
+        message  : update_stock
     })
 }
 
