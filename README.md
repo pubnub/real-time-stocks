@@ -53,13 +53,14 @@ auto-optimizes the connection for each subscription issued.
 There are two important tuning levers available to you with the
 PubNub JavaScript SDK for improved performance vs reduced bandwidth.
 Consider the compression ratio savings to latency opportunity.
-With `windowing` you receive the opportunity to reduce bandwidth consumption
-drastically by allowing message bundling.
+With `windowing` you receive the opportunity to reduce bandwidth consumed
+drastically by allowing messages to be bundled.
 
-This *Bundle of Messages* that is allowed to accumulate on the network buffer
-before the client receives is a good thing as we have the opportunity now to 
-highly compress the data using streaming GZIP.
-This combination of windowing and gzip compressing  provides high throughput
+This *Bundle of Messages* is allowed to accumulate on the network buffer
+before the client receives an update.
+This is a good thing as we have the opportunity now to 
+highly compress the data using streaming GZIP compression.
+This combination of windowing and gzip compressing provides high throughput
 at low bandwidth costs; saving
 you and your end-consumers a lot of bandwidth.
 
@@ -70,13 +71,15 @@ along with a general expected rate of messages per second.
 var pubnub = PUBNUB.init({
     windowing     : 1000,  // Allow 1 Second to Buffer and Construct a bundle.
     timeout       : 2000,  // Expected to receive at least 1 message each 2 Second.
-                           // Do not set lower than 2000.
-                           // You'll hit strange behavior as 2000 is max.
     subscribe_key : 'demo'
 });
 ```
 
-Here is a table of recommended values based on messages per second.
+Note that the lower the `windowing` value the less compression opportunity
+and the higher the value the more latency is allowed for bundled messages
+with high compression ratios.
+The provided numbers above are recommended for streaming stock symbols.
+
 
 ## PHP Server Broadcaster
 
