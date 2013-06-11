@@ -154,12 +154,37 @@ to bootstrap when it is loaded.
 
 >NOTE: You must have running `stock.php` processes on the same machine.
 
+The client HTML5 JavaScript App will execute:
+
+```javascript
+pubnub.history({
+    channel  : 'stockblast',
+    callback : function(msgs) { start_stream(msgs[0]) }
+});
+```
+
+This will bootstrap the client based on what was running on your server
+at the time of running `php bootstrap.php` command.
+
 
 ## History
 
 This application uses a `pubnub.history()` call for several purposes.
 One is to bootstrap the HTML5 client app.
-Another is to load the history of the chat data.
+Another is to load the history of the chat conversations.
+
+
+## Simple Embedded Chat Application
+
+Also provided here in this stock demo is a basic chat which allows
+you to communicate with a group of collaborators in real-time.
+The chat stream is separate from the stock symbol ticker stream.
+
+![Real-time Stock Feed PHP JavaScript Chat](http://pubnub-demo.s3.amazonaws.com/real-time-stock/real-time-stock-php-javascript-with-chat.png "Real-time Stock Feed PHP JavaScript Chat")
+
+>NOTE: This is a basic chat where you can find the integrated
+source code currently inside `app.js` JavaScript source file.
+
 
 Here is the full source code for the chat example:
 
@@ -260,19 +285,8 @@ pubnub.bind( 'keyup', input, function(e) {
 })();</script>
 ```
 
-## Simple Embedded Chat Application
 
-Also provided here in this stock demo is a basic chat which allows
-you to communicate with a group of collaborators in real-time.
-The chat stream is separate from the stock symbol ticker stream.
-
-![Real-time Stock Feed PHP JavaScript Chat](http://pubnub-demo.s3.amazonaws.com/real-time-stock/real-time-stock-php-javascript-with-chat.png "Real-time Stock Feed PHP JavaScript Chat")
-
->NOTE: This is a basic chat where you can find the integrated
-source code currently inside `app.js` JavaScript source file.
-
-
-### The PubNub Real-Time Network
+## The PubNub Real-Time Network
 ##### Build real-time apps quickly and scale them globally.
 
 The Only Global Network For Real-Time Data
