@@ -17,12 +17,9 @@ var pubnub         = PUBNUB.init({
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // 
-// Main Get Started
+// Main - Load Bootstrap or attempt the fall-back default.
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-start_stream(pubnub.uuid().slice(-4));
-
-// Preload
 pubnub.history({
     channel  : 'stockblast',
     callback : function(msgs) {

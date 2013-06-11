@@ -135,6 +135,26 @@ php stock.php GOOG 879.73 250000 2500000 100
 
 This is a simple non-GNU-screen example of running the PHP Process.
 
+
+## HTML5 Client Bootstrapping 
+
+For the server which is providing all the quote streams, you can use
+the `bootstrap.php` file in the `php-broadcaster` directory
+to bootstrap the available symbol streams.
+Just execute the script after you've launched or changed new PHP Streams:
+
+```php
+cd php-broadcaster
+php bootstrap.php
+```
+
+This will look for all running `stock.php` processes and join the result
+into a comma separated list which is published for client HTML5 app
+to bootstrap when it is loaded.
+
+>NOTE: You must have running `stock.php` processes on the same machine.
+
+
 ## History
 
 This application uses a `pubnub.history()` call for several purposes.
@@ -240,25 +260,6 @@ pubnub.bind( 'keyup', input, function(e) {
 })();</script>
 ```
 
-
-## HTML5 Client Bootstrapping 
-
-For the server which is providing all the quote streams, you can use
-the `bootstrap.php` file in the `php-broadcaster` directory
-to bootstrap the available symbol streams.
-Just execute the script after you've launched or changed new PHP Streams:
-
-```php
-cd php-broadcaster
-php bootstrap.php
-```
-
-This will look for all running `stock.php` processes and join the result
-into a comma separated list which is published for client HTML5 app
-to bootstrap when it is loaded.
-
->NOTE: You must have running `stock.php` processes on the same machine.
-
 ## Simple Embedded Chat Application
 
 Also provided here in this stock demo is a basic chat which allows
@@ -269,10 +270,6 @@ The chat stream is separate from the stock symbol ticker stream.
 
 >NOTE: This is a basic chat where you can find the integrated
 source code currently inside `app.js` JavaScript source file.
-
-## AES256 Cipher Key Cryptography Options
-
-
 
 
 ### The PubNub Real-Time Network
