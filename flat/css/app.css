@@ -40,8 +40,45 @@ header {
 
 
 /* ======================================================================= */
+/* EMBLEM
+/* ======================================================================= */
+.emblem {
+    line-height: 24px;
+    padding-right: 7px;
+}
+.emblem-home {
+    line-height: 43px;
+    padding-right: 10px;
+}
+.emblem-header {
+    line-height: 24px;
+    padding-right: 7px;
+}
+.emblem-footer {
+    line-height: 17px;
+    padding-right: 7px;
+}
+
+
+/* ======================================================================= */
 /* UTILITIES
 /* ======================================================================= */
+a.github-link {
+    color: #ecf0f1;
+}
+a.github-link:hover {
+    color: #1abc9c;
+}
+a.github-link:active {
+    color: #e74c3c;
+}
+.github {
+    width: 250px;
+    height: 250px;
+    background-size: 250px;
+    background-image:
+    url(http://pubnub-demo.s3.amazonaws.com/real-time-stock/github-logo.png);
+}
 .chat-time {
     width: 60px;
     display: inline-block;

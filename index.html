@@ -23,10 +23,31 @@
     <div class="navbar">
     <div class="navbar-inner">
     <div class="nav-collapse collapse">
+    <div class=float-left>
     <ul class="nav">
-        <li><a href="#link">Real-Time Financial Dashboard & Chat</a></li>
-        <li><a href="#link">&nbsp;</a></li>
-    </ul></div></div></div>
+        <li><a href="website.html">
+            <span class="fui-chat emblem-header"></span>
+            Real-Time Financial Dashboard & Chat
+        </a></li>
+    </ul>
+    </div>
+    <div class=float-right>
+    <ul class="nav">
+
+        <li><a href="#basics">
+        Basics</a></li>
+
+        <li><a
+        href=https://github.com/pubnub/real-time-stocks/blob/master/README.md>
+        README.md</a></li>
+
+        <li><a href=VIDEVIDEVIDEVIDEVIDEVIDEVIDEVIDEVIDEVIDEVIDEOOOOOOOOOOO>
+        Video</a></li>
+
+        <li><a href=https://github.com/pubnub/real-time-stocks/>
+        GitHub</a></li>
+
+    </ul></div></div></div></div>
     <div class=clear></div>
 
 </div></header>
@@ -72,8 +93,7 @@
     <div class="row"><div class="span3">
         <h2>Group Chat</h2>
     </div></div>
-    <div class="row">
-    </div>
+    <div class="row"></div>
     <div class="row row-margin">
         <div class="span9">
             <input type="text"
@@ -91,20 +111,45 @@
         </div>
         <div id="chat-output" class="span11">
             <!-- CHAT OUTPUT HERE -->
+            <!-- CHAT OUTPUT HERE -->
+            <!-- CHAT OUTPUT HERE -->
         </div>
     </div>
 
 </div></div></div>
 
 
+<!-- ===================== -->
+<!-- PANEL: JS INCLUDE SRC -->
+<!-- ===================== -->
+<div id=basics class=palette-peter-river>
+<div class=container>
+<div class=panel>
+<div class=row>
+
+    <!-- ==== -->
+    <!-- INIT -->
+    <!-- ==== -->
+    <div class="span12">
+        <div class="palette">
+        <h2>JavaScript Include</h2>
+<pre class="code">
+&lt;script src="http://cdn.pubnub.com/pubnub-3.5.1.min.js"&gt;&lt;/script&gt;
+</pre></div></div><!-- END JS INCLUDE SRC -->
+
+</div>
+</div>
+</div>
+</div>
+
 
 <!-- =================== -->
 <!-- PANEL: INIT EXAMPLE -->
 <!-- =================== -->
-<div class="palette-peter-river">
+<div id=basics class=palette-peter-river>
 <div class=container>
 <div class=panel>
-<div class="row">
+<div class=row>
 
     <!-- ==== -->
     <!-- INIT -->
@@ -118,6 +163,19 @@ var pubnub = PUBNUB.init({
     publish_key   : 'demo'
 });
 </pre></div></div><!-- END INIT -->
+<div class="span6"><div class="palette">
+    <h4>Introduciton</h4>
+    <p>
+        This is the first step to initialize the Connection Class
+        which will be used in the following steps below.
+    </p><p>
+        The following examples below will show a few more options
+        that will allow you to open TCP sockets and stream
+        only the data that you are interested in.
+        This is called <strong>Stream Multiplexing</strong>
+        which streams multiple feeds over a single TCP Socket.
+    </p>
+</div></div>
 
 </div>
 </div>
@@ -138,7 +196,7 @@ var pubnub = PUBNUB.init({
     <!-- ========= -->
     <div class="span6">
         <div class="palette">
-        <h2>PubNub - Open Multiplexed Stream</h2>
+        <h3>PubNub - Open Multiplexed Stream</h3>
 <pre class="code">
 pubnub.subscribe({
     channel : ['MSFT', 'YHOO', 'ORCL'],
@@ -151,7 +209,7 @@ pubnub.subscribe({
     <!-- =========== -->
     <div class="span6">
         <div class="palette">
-        <h2>PubNub - Stop One Stream</h2>
+        <h3>PubNub - Stop One Stream</h3>
 <pre class="code">
 pubnub.unsubscribe({ channel : 'MSFT' })
 
@@ -178,7 +236,7 @@ pubnub.unsubscribe({ channel : 'MSFT' })
     <!-- ======= -->
     <div class="span6">
         <div class="palette">
-        <h2>PubNub - History</h2>
+        <h3>PubNub - History</h3>
 <pre class="code">
 pubnub.history({
     limit    : 5,
@@ -193,7 +251,7 @@ function history_receiver(messages) {
 
 
     <div class="span6"><div class="palette">
-        <h2>History Example</h2>
+        <h3>History Example</h3>
 
         <!-- HISTORY BUTTON EXAMPLE -->
         <div class="share mrl">
@@ -215,6 +273,85 @@ function history_receiver(messages) {
 </div>
 
 
+
+
+<!-- ===================== -->
+<!-- PANEL: GITHUB DETAILS -->
+<!-- ===================== -->
+<div class="palette-amethyst">
+<div class=container>
+<div class=panel>
+<div class="row">
+
+    <!-- ====== -->
+    <!-- GITHUB -->
+    <!-- ====== -->
+    <div class="span4"><div class="palette">
+        <div class=github>&nbsp;</div>
+    </div></div>
+
+    <div class="span8"><div class="palette">
+        <h3>PubNub - GitHub Repository</h3>
+        <p><a
+        class=github-link
+        href=https://github.com/pubnub/real-time-stocks/blob/master/README.md>
+        https://github.com/pubnub/real-time-stocks/blob/master/README.md</a>
+        </p><p>
+            Open Source and free to get started easily by visiting the GitHub
+            Repository which allows you to easily copy the code to your
+            local machine and begin testing.
+        </p>
+    </div></div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- ====== -->
+<!-- FOOTER -->
+<!-- ====== -->
+<footer><div class="container"><div class="row">
+    <div class="span7">
+        <h3 class="footer-title">
+            More with PubNub Real-time Network
+        </h3>
+        <p>
+            Do you like this freebie?
+            Want to get more stuff like this?<br/>
+            Subscribe to
+            <a href="http://twitter.com/PubNub">@PubNub</a>
+            news and updates to stay tuned on great designs.<br/>
+        </p>
+        <p class="pvl">
+            <a href="https://twitter.com/share">Tweet</a>
+        </p>
+    </div>
+
+    <div class="span5">
+        <div class="footer-banner">
+            <h3 class="footer-title">
+                <span class="fui-chat emblem-footer"></span>
+                PubNub Network
+            </h3>
+
+            <div class=row-margin-small>
+            <a class="btn btn-success btn-large btn-block"
+            href="https://admin.pubnub.com">Get Started</a></div>
+
+            <ul>
+                <li>Core Building Blocks for Secure Real-Time</li>
+                <li>A Lot of Useful Samples</li>
+                <li>Real-Time on a Redundant, Global Network</li>
+                <li>Rapid Development and On-Demand Scaling</li>
+                <li>Drops into Mobile and Web by Default</li>
+                <li>Over 50 Supported SDKs</li>
+            </ul>
+
+        </div>
+    </div>
+</div></div></footer>
 
 
 <script src=http://cdn.pubnub.com/pubnub-3.5.1.min.js></script>
