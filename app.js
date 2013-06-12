@@ -74,11 +74,14 @@ pubnub.history({
         // Clean Precaution
         message.text = clean(message.text);
 
+        // Don't Show Blank Messages
+        if (!message.text.replace( /\s/g, '' )) return;
+
         // Ouptut to Screen
         output.innerHTML = pubnub.supplant(
             "<strong class=chat-time>{time}</strong> "+
             "<strong class=chat-name>( {name} )</strong> | &nbsp;"+
-            "{text}<br>", message
+            "''{text}''<br>", message
         ) + output.innerHTML;
     }
 

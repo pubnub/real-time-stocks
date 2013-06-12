@@ -2780,14 +2780,14 @@ footer p {
   width: 216px;
 }
 .footer-banner {
-  background-color: #2980B9;
-  color: #d1f2eb;
+  background-color: #E74C3C;
+  color: #fff;
   margin-left: 42px;
   min-height: 286px;
   padding: 0 30px 30px;
 }
 .footer-banner .footer-title {
-  color: #ffffff;
+  color: #fff;
 }
 .footer-banner a {
 }
@@ -2799,7 +2799,7 @@ footer p {
   margin: 0 0 26px;
 }
 .footer-banner ul li {
-  border-top: 1px solid #1bc5a3;
+  border-top: 1px solid #C0392B;
   line-height: 19px;
   padding: 6px 0;
 }
