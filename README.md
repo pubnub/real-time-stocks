@@ -1,6 +1,6 @@
 # Real-time Stocks with PHP and JavaScript
 
-[Live Demo TRY IT NOW! - http://rtstock.co](http://rtstock.co)
+### [TRY IT NOW! - http://rtstock.co](http://rtstock.co)
 
 You are looking at a **real-time stock** app that sends data from a
 **PHP Server Process** to an **HTML5 JavaScript** app in real-time.
