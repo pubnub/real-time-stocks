@@ -23,13 +23,11 @@ var pubnub         = PUBNUB.init({
 pubnub.history({
     channel  : 'stockblast',
     callback : function(msgs) {
-        try       { start_stream(msgs[0]) }
-        catch (e) {
-            start_stream(
-                'BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,'+
-                'ORCL,TRI,YHOO,ZNGA,AAPL'
-            );
-        }
+        if (msgs && msgs[0] && msgs[0].length) start_stream(msgs[0]);
+        else start_stream(
+            'BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,'+
+            'ORCL,TRI,YHOO,ZNGA,AAPL,F'
+        );
     }
 });
 
