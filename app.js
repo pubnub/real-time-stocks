@@ -9,6 +9,7 @@ var stocks         = {}
 ,   stock_tickers  = PUBNUB.$("stock-tickers")
 ,   stock_template = PUBNUB.$("stock-template").innerHTML;
 var pubnub         = PUBNUB.init({
+    noleave       : true,
     windowing     : 200,
     timeout       : 2000,
     subscribe_key : 'demo'
@@ -39,6 +40,7 @@ pubnub.history({
 (function(){
 
     var pubnub  = PUBNUB.init({
+        noleave       : true,
         subscribe_key : 'demo',
         publish_key   : 'demo'
     });
