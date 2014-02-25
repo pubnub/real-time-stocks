@@ -104,7 +104,7 @@ To get started you'll execute the server logic as follows:
 
 ##### PHP Example with `MSFT` stock
 ```php
-screen -d -m -S MSFT php stock.php MSFT 102.67 250000 2500000 100 25
+screen -dmS MSFT php stock.php MSFT 102.67 250000 2500000 100 25
 ```
 
 This example launches the stock streamer with default starting values:
