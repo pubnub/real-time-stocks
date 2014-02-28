@@ -321,20 +321,12 @@ pubnub.bind( 'keyup', input, function(e) {
 ## The PubNub Real-Time Network
 ##### Build real-time apps quickly and scale them globally.
 
-The Only Global Network For Real-Time Data
-Thousands of mobile, web, and desktop apps rely on the PubNub Real-Time
-Network to deliver highly scalable real-time experiences to tens of millions
-of users worldwide.
-Around the world, from innovative start-ups to globally recognized brands,
-PubNub is powering a broad variety of apps:
-effective real-time advertising campaigns,
-global telecommunications apps,
-immersive Massively Multiplayer Online Games (MMOGs),
-responsive social apps,
-real-time ecommerce applications,
-and a variety of business collaborative solutions.
+The only global network for real-time data.
 
- - 100% Cloud, No deployment, scaling, or pricing hassles
+Thousands of mobile, web, and desktop apps rely on PubNub's real-time network to deliver highly scalable real-time data to tens of millions of users worldwide.
+From innovative start-ups to globally recognized brands around the world, PubNub is powering a broad variety of apps: effective real-time advertising campaigns, global telecommunications apps, immersive Massively Multiplayer Online Games (MMOGs), responsive social apps, real-time ecommerce applications and a variety of business collaborative solutions.
+
+ - Hosted in the Cloud: no deployment, scaling, or pricing hassles
  - Deployed in 11 data centers globally
- - 1000's of customers, Millions of messages per second
+ - 1000's of customers, millions of messages per second
 
