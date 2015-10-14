@@ -1,5 +1,5 @@
 <?php
-require_once('Pubnub.php');
+require_once('../vendor/autoload.php');
 
 ## ---------------------------------------------------------------------------
 ## USAGE:
@@ -16,7 +16,7 @@ $ssl_on        = false;
 ## ---------------------------------------------------------------------------
 ## Create Pubnub Object
 ## ---------------------------------------------------------------------------
-$pubnub = new Pubnub(
+$pubnub = new Pubnub\Pubnub(
     $publish_key,
     $subscribe_key,
     $secret_key,
@@ -36,9 +36,4 @@ $streams = system(implode( ' | ', array(
     'tr "\n+" ","'
 ) ));
 
-$publish_success = $pubnub->publish(array(
-    'channel' => $channel,
-    'message' => trim( $streams, ',' )
-));
-
-?>
+$publish_success = $pubnub->publish($channel, trim($streams, ','));

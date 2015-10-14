@@ -1,5 +1,5 @@
 <?php
-require_once('Pubnub.php');
+require_once('../vendor/autoload.php');
 
 ## ---------------------------------------------------------------------------
 ## STANDARD USAGE
@@ -32,7 +32,7 @@ $ssl_on        = false;
 ## ---------------------------------------------------------------------------
 ## Create Pubnub Object
 ## ---------------------------------------------------------------------------
-$pubnub = new Pubnub(
+$pubnub = new Pubnub\Pubnub(
     $publish_key,
     $subscribe_key,
     $secret_key,
@@ -76,10 +76,7 @@ while (1) {
         "vol"   => $vol
     );
 
-    $publish_success = $pubnub->publish(array(
-        'channel' => $channel,
-        'message' => $stream
-    ));
+    $publish_success = $pubnub->publish($channel, $stream);
 
     echo($t . " " . $publish_success[0] . " " . $publish_success[1]);
     echo("\r\n");
@@ -93,5 +90,3 @@ while (1) {
     if (abs($perc) > $maxDelta) $currPrice = $sPrice;
     usleep($slptime);
 }
-
-?>
