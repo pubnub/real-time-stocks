@@ -1,0 +1,12 @@
+{
+    "name": "pubnub/real-time-stocks",
+    "require": {
+        "pubnub/pubnub": "^3.7"
+    },
+    "authors": [
+        {
+            "name": "Alexander Novikov",
+            "email": "anovikov@granpm.com"
+        }
+    ]
+}
