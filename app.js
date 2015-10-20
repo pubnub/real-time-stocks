@@ -21,14 +21,18 @@ var pubnub         = PUBNUB.init({
 // Main - Load Bootstrap or attempt the fall-back default.
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-pubnub.history({
-    channel  : 'stockblast',
-    callback : function(msgs) {
-        if (msgs && msgs[0] && msgs[0].length) start_stream(msgs[0]);
-        else start_stream(
-            'BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,'+
-            'ORCL,TRI,YHOO,ZNGA,AAPL,F'
-        );
+pubnub.channel_group_list_channels({
+    channel_group: "stockblast",
+    callback: function(response) {
+        var channels = response.channels;
+        if (channels && channels.constructor === "Array" && channels.length > 0) {
+            start_stream(response.join(","));
+        } else {
+            start_stream(
+                'BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,'+
+                'ORCL,TRI,YHOO,ZNGA,AAPL,F'
+            );
+        }
     }
 });
 

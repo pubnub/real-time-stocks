@@ -27,7 +27,7 @@ $pubnub = new Pubnub\Pubnub(
 ## ---------------------------------------------------------------------------
 ## Find all Streams running on this system
 ## ---------------------------------------------------------------------------
-$channel = "stockblast";
+$group = "stockblast";
 $streams = system(implode( ' | ', array(
     'ps a',
     'grep stock.php',
@@ -36,4 +36,10 @@ $streams = system(implode( ' | ', array(
     'tr "\n+" ","'
 ) ));
 
-$publish_success = $pubnub->publish($channel, trim($streams, ','));
+## ---------------------------------------------------------------------------
+## Cleanup channel group and add current channels to it
+## ---------------------------------------------------------------------------
+$channels = explode(",", trim($streams, ","));
+
+$pubnub->channelGroupRemoveGroup($group);
+$pubnub->channelGroupAddChannel($group, $channels);
