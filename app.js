@@ -5,7 +5,8 @@
 // Setup Variables and Objects
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-var stocks         = {}
+var stocks         = new Map()
+,   disabledTickers  = new Set()
 ,   stock_tickers  = PUBNUB.$("stock-tickers")
 ,   stock_template = PUBNUB.$("stock-template").innerHTML;
 var pubnub         = PUBNUB.init({
@@ -21,20 +22,8 @@ var pubnub         = PUBNUB.init({
 // Main - Load Bootstrap or attempt the fall-back default.
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-pubnub.channel_group_list_channels({
-    channel_group: "stockblast",
-    callback: function(response) {
-        var channels = response.channels;
-        if (channels && channels.constructor === "Array" && channels.length > 0) {
-            start_stream(response.join(","));
-        } else {
-            start_stream(
-                'BIDU,CBS,EA,FB,GOOG,LNKD,MSFT,'+
-                'ORCL,TRI,YHOO,ZNGA,AAPL,F'
-            );
-        }
-    }
-});
+
+main();
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // 
@@ -120,16 +109,19 @@ pubnub.channel_group_list_channels({
 // Update a Ticker Value on Screen
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-function update_stock( data, env, ticker ) {
+function update_stock( data, env, group, latency, ticker ) {
+    var stock;
 
     // Add Name
     data['name'] = ticker;
 
     // Setup Ticker Display
-    var stock = stocks[ticker] = ticker in stocks &&
-    stocks[ticker] || (function(){
-        var div   = pubnub.create('div')
-        ,   stock = {};
+    stock = stocks.get(ticker);
+
+    if (typeof stock === 'undefined') {
+        var div = pubnub.create('div');
+
+        stock = {};
 
         // Remember Ticker ID
         data.ticker = data.id = ticker
@@ -151,19 +143,24 @@ function update_stock( data, env, ticker ) {
         // Add Flipswitch
         flipswitch( ticker, function( on, off ) {
             console.log( on, off, ticker );
-            if (on)  start_stream(ticker);
-            if (off) stop_stream(ticker)
+            if (on)  enableStream(ticker);
+            if (off) disableStream(ticker)
         } );
 
-        // Return References
-        return stock;
-    })();
+        // Set created value
+        stocks.set(ticker, stock);
+    }
 
     // Update UIstock
     update_stock_display( data, stock );
 }
 
 function update_stock_display( data, stock ) {
+    // Ignore if ticker was explicitly removed from active
+    if (disabledTickers.has(data.ticker)) {
+        return;
+    }
+
     var delta = data.delta;
 
     stock['time'].innerHTML  = data.time;
@@ -211,17 +208,35 @@ function flipswitch( id, callback ) {
 // Start and Stop Streams
 // 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-function start_stream(id) {
-    pubnub.subscribe({
-        backfill : true,
-        channel  : id,
-        message  : update_stock
-    })
+function main() {
+    var channelGroup = 'stockblast';
+
+    pubnub.channel_group_list_channels({
+        channel_group: channelGroup,
+        callback: function (response) {
+            if ('channels' in response && response.channels.length > 0) {
+                response.channels.forEach(function (channel) {
+                    disabledTickers.add(channel);
+                });
+            }
+
+            pubnub.subscribe({
+                backfill : true,
+                channel_group: channelGroup,
+                message  : update_stock
+            });
+        }
+    });
+
 }
 
-function stop_stream(id) {
+function enableStream(id) {
+    disabledTickers.delete(id);
+}
+
+function disableStream(id) {
     pubnub.css( pubnub.$("stock-id-"+id), { background : "#ecf0f1" } );
-    pubnub.unsubscribe({ channel : id })
+    disabledTickers.add(id);
 }
 
 
