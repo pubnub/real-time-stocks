@@ -1,4 +1,4 @@
-(function() {
+$(function() {
   'use strict';
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -15,92 +15,34 @@
         windowing: 200,
         timeout: 2000,
         subscribe_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-      });
+      }),
+      loadHistoryBtn  = pubnub.$('load-history-example'),
+      historyOut      = pubnub.$('output-history-example'),
+      channelGroup = 'stockblast';
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   //
-  // Main - Load Bootstrap or attempt the fall-back default.
+  // Run initializers
   //
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-  main();
+  initializeStock();
+  initializeChat();
+  initializeHistoryExample();
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   //
-  // Chat
+  // Initialize Stock subscription
   //
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  (function() {
-    var pubnub  = PUBNUB.init({
-          noleave: true,
-          subscribe_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-          publish_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-        }),
-        input   = pubnub.$('chat-input'),
-        output  = pubnub.$('chat-output'),
-        cname   = pubnub.$('chat-name'),
-        channel = 'stock-chat';
 
-    // Send Chat Message
-    function send() {
-      if (!input.value) return;
-
-      return pubnub.publish({
-        channel: channel,
-        message: {
-          name: clean(cname.value),
-          text: clean(input.value),
-          time: dateOut(),
-        },
-        x: (input.value = ''),
-      });
-    }
-
-    // Append Chat Message
-    function chat(message) {
-      // Default Name
-      if (!('name' in message)) message.name = 'Robert';
-      message.name = message.name.slice(0, 10);
-
-      // Clean Precaution
-      message.text = clean(message.text);
-
-      // Don't Show Blank Messages
-      if (!message.text.replace(/\s/g, '')) return;
-
-      // Ouptut to Screen
-      output.innerHTML = pubnub.supplant(
-          '<strong class=chat-time>{time}</strong> ' +
-          '<strong class=chat-name>( {name} )</strong> | &nbsp;' +
-          '\'\'{text}\'\'<br>', message
-        ) + output.innerHTML;
-    }
-
-    // On Connect we can Load History
-    function connect() {
-      pubnub.history({
-        channel: channel,
-        limit: 50,
-        callback: function(msgs) {
-          if (msgs.length > 1) {
-            pubnub.each(msgs[0], chat);
-          }
-        },
-      });
-    }
-
-    // Receive Chat Message
+  function initializeStock() {
     pubnub.subscribe({
-      channel: channel,
-      connect: connect,
-      callback: chat,
+      backfill: true,
+      channel_group: channelGroup,// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+      message: updateStock,
     });
-
-    pubnub.bind('keyup', input, function(e) {
-      (e.keyCode || e.charCode) === 13 && send();
-    });
-
-  })();
+  }
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   //
@@ -138,10 +80,12 @@
       stock.vol    = pubnub.$('stock-vol-'    + ticker);
       stock.switch = pubnub.$('stock-switch-' + ticker);
 
-      // Add Flipswitch
-      flipswitch(ticker, function(on, off) {
-        if (on)  enableStream(ticker);
-        if (off) disableStream(ticker);
+      $('#stock-switch-' + ticker).bootstrapSwitch().on('switchChange.bootstrapSwitch', function(event, state) {
+        state ? enableStream(ticker) : disableStream(ticker);
+      });
+
+      $('#stock-id-' + ticker).on('click', function() {
+        $('#stock-switch-' + ticker).click();
       });
 
       // Set created value
@@ -173,47 +117,9 @@
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   //
-  // Flip Switch ON/OFF
+  // Enable and Disable parsing messages on specific channels
   //
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  function flipswitch(id, callback) {
-    var ticker        = pubnub.$('stock-id-' + id),
-        trackerSwitch = pubnub.$('stock-switch-' + id);
-
-    pubnub.bind('mousedown,touchstart', ticker, function() {
-      var on        = pubnub.attr(ticker, 'data-on'),
-          state     = on == 'on',
-          onOff     = (state ? 'off' : 'on'),
-          classname = 'switch-' + onOff + ' switch-animate';
-
-      // Flip For Later Switching
-      pubnub.attr(ticker, 'data-on', onOff);
-
-      // Update UI
-      pubnub.attr(trackerSwitch, 'class', classname);
-      trackerSwitch.className = classname;
-
-      // Run User Callback
-      callback(!state, state);
-
-      return false;
-    });
-  }
-
-  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  //
-  // Start and Stop Streams
-  //
-  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  function main() {
-    var channelGroup = 'stockblast';
-
-    pubnub.subscribe({
-      backfill: true,
-      channel_group: channelGroup,// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-      message: updateStock,
-    });
-  }
 
   function enableStream(id) {
     disabledTickers.delete(id);
@@ -226,23 +132,99 @@
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   //
-  // Load History Example Code
+  // Initialize Chat
   //
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  var loadHistoryBtn = pubnub.$('load-history-example'),
-      historyOut     = pubnub.$('output-history-example');
+  function initializeChat() {
+    var pubnubChat  = PUBNUB.init({
+          noleave: true,
+          subscribe_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+          publish_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+        }),
+        input   = pubnubChat.$('chat-input'),
+        output  = pubnubChat.$('chat-output'),
+        cname   = pubnubChat.$('chat-name'),
+        channel = 'stock-chat';
 
-  pubnub.bind('mousedown,touchstart', loadHistoryBtn, function() {
-    pubnub.history({
-      limit: 5,
-      channel: 'MSFT',
-      callback: function(msgs) {
-        historyOut.innerHTML = JSON.stringify(msgs[0]);
-      },
+    // Send Chat Message
+    function sendMessage() {
+      if (!input.value) return;
+
+      return pubnubChat.publish({
+        channel: channel,
+        message: {
+          name: clean(cname.value),
+          text: clean(input.value),
+          time: dateOut(),
+        },
+        x: (input.value = ''),
+      });
+    }
+
+    // Append Chat Message
+    function appendMessageToChat(message) {
+      // Default Name
+      if (!('name' in message)) message.name = 'Robert';
+      message.name = message.name.slice(0, 10);
+
+      // Clean Precaution
+      message.text = clean(message.text);
+
+      // Don't Show Blank Messages
+      if (!message.text.replace(/\s/g, '')) return;
+
+      // Ouptut to Screen
+      output.innerHTML = pubnubChat.supplant(
+          '<strong class=chat-time>{time}</strong> ' +
+          '<strong class=chat-name>( {name} )</strong> | &nbsp;' +
+          '\'\'{text}\'\'<br>', message
+        ) + output.innerHTML;
+    }
+
+    // On Connect we can Load History
+    function connect() {
+      pubnubChat.history({
+        channel: channel,
+        limit: 50,
+        callback: function(msgs) {
+          if (msgs.length > 1) {
+            pubnubChat.each(msgs[0], appendMessageToChat);
+          }
+        },
+      });
+    }
+
+    // Receive Chat Message
+    pubnubChat.subscribe({
+      channel: channel,
+      connect: connect,
+      callback: appendMessageToChat,
     });
 
-    return false;
-  });
+    pubnubChat.bind('keyup', input, function(e) {
+      (e.keyCode || e.charCode) === 13 && sendMessage();
+    });
+
+  }
+
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  //
+  // Initialize History Example Code
+  //
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  function initializeHistoryExample() {
+    pubnub.bind('mousedown,touchstart', loadHistoryBtn, function() {
+      pubnub.history({
+        limit: 5,
+        channel: 'MSFT',
+        callback: function(msgs) {
+          historyOut.innerHTML = JSON.stringify(msgs[0]);
+        },
+      });
+
+      return false;
+    });
+  }
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   //
@@ -272,5 +254,4 @@
       pmam: hrs > 11 ? 'pm' : 'am',
     });
   }
-
-})();
+});

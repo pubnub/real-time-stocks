@@ -73,8 +73,7 @@
                 <div id="stock-time-{id}" >{time}</div>
                 <h5  id="stock-vol-{id}"  >{vol}</h5>
             </div>
-
-            <div class="switch has-switch"><div id="stock-switch-{id}" class="switch-on switch-animate"><span class="switch-left">ON</span><label>&nbsp;</label><span class="switch-right">OFF</span></div></div>
+            <input type="checkbox" checked data-toggle="switch" id="stock-switch-{id}" data-handle-width="62" data-label-width="39"/>
         </div>
     </div>
 </script>
@@ -449,6 +448,7 @@ log_messages(messages);
 
 
 <script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
 <script src="http://cdn.pubnub.com/pubnub-3.7.15.js"></script>
 <script src="script.js"></script>
 
