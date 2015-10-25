@@ -58,7 +58,7 @@
 <!-- PANEL: STOCK TEMPLATE -->
 <!-- ===================== -->
 <script id="stock-template" type="text/template">
-    <div class="col-xs-2 row-margin-small clickable">
+    <div class="col-sm-2 row-margin-small clickable">
         <div id="stock-id-{id}" data-on="on" class="tile animate">
 
             <div id="stock-values-{id}">
@@ -133,25 +133,31 @@
         </div>
         <div class="row"></div>
         <div class="row row-margin">
-            <div class="col-lg-9">
-                <input type="text"
-                       id="chat-input"
-                       value=""
-                       placeholder="Chat Here"
-                       class="col-lg-9">
-            </div>
-            <div class="col-lg-3">
-                <input type="text"
-                       id="chat-name"
-                       value="Todd"
-                       class="col-lg-2">
-                &nbsp;<span class="fui-user"></span>
-            </div>
-            <div id="chat-output" class="col-lg-11">
-                <!-- CHAT OUTPUT HERE -->
-                <!-- CHAT OUTPUT HERE -->
-                <!-- CHAT OUTPUT HERE -->
-            </div>
+            <form class="form">
+                <div class="col-lg-8 form-group">
+                    <input type="text"
+                           id="chat-input"
+                           value=""
+                           placeholder="Chat Here"
+                           class="col-lg-12 form-control">
+                </div>
+                <div class="col-lg-3 col-lg-offset-1 form-group">
+                    <div class="input-group">
+                        <input type="text"
+                               id="chat-name"
+                               value="Todd"
+                               class="form-control">
+                        <span class="input-group-addon">
+                        <span class="fui-user"></span>
+                        </span>
+                    </div>
+                </div>
+                <div id="chat-output" class="col-lg-12">
+                    <!-- CHAT OUTPUT HERE -->
+                    <!-- CHAT OUTPUT HERE -->
+                    <!-- CHAT OUTPUT HERE -->
+                </div>
+            </form>
         </div>
     </div>
 </div>
