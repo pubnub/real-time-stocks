@@ -55,7 +55,7 @@ $response = $pubnub->pamGrantChannelGroup(0, 1, $group, $bootstrap_auth);
 validateResponse($response);
 
 ## To chat
-$response = $pubnub->grant(1, 1, $chat, null, 5);
+$response = $pubnub->grant(1, 1, $chat, null);
 validateResponse($response);
 
 ## To stock tickers
