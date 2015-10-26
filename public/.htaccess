@@ -1,0 +1,2 @@
+SetEnv PUBNUB_PUB_KEY demo
+SetEnv PUBNUB_SUB_KEY demo

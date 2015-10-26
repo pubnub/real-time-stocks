@@ -1,3 +1,5 @@
+// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+
 $(function() {
   'use strict';
 
@@ -8,38 +10,37 @@ $(function() {
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   var stocks          = new Map(),
       disabledTickers = new Set(),
-      stockTickers    = PUBNUB.$('stock-tickers'),
-      stockTemplate   = PUBNUB.$('stock-template').innerHTML,
-      pubnub          = PUBNUB.init({
-        noleave: true,
-        windowing: 200,
-        timeout: 2000,
-        subscribe_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-      }),
-      loadHistoryBtn  = pubnub.$('load-history-example'),
-      historyOut      = pubnub.$('output-history-example'),
-      channelGroup = 'stockblast';
+      channelGroup = 'stockblast',
+      credentials,
+      pubnubStocks,
+      stockTickers,
+      stockTemplate,
+      loadHistoryBtn,
+      historyOut,
+      options;
 
-  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  //
-  // Run initializers
-  //
-  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-  initializeStock();
-  initializeChat();
-  initializeHistoryExample();
+  options = {
+    noleave: true,
+    windowing: 200,
+    timeout: 2000,
+  };
 
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   //
   // Initialize Stock subscription
   //
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
   function initializeStock() {
-    pubnub.subscribe({
+    pubnubStocks = PUBNUB.init($.extend({}, options, { subscribe_key: credentials.subscribe_key }));
+
+    stockTickers    = PUBNUB.$('stock-tickers');
+    stockTemplate   = pubnubStocks.$('stock-template').innerHTML;
+    loadHistoryBtn  = document.getElementById('load-history-example');
+    historyOut      = $('#output-history-example')[0];
+
+    pubnubStocks.subscribe({
       backfill: true,
-      channel_group: channelGroup,// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
+      channel_group: channelGroup,
       message: updateStock,
     });
   }
@@ -59,26 +60,26 @@ $(function() {
     stock = stocks.get(ticker);
 
     if (typeof stock === 'undefined') {
-      var div = pubnub.create('div');
+      var div = pubnubStocks.create('div');
 
       stock = {};
 
       // Remember Ticker ID
       data.ticker = data.id = ticker;
-      div.innerHTML = pubnub.supplant(stockTemplate, data);
+      div.innerHTML = pubnubStocks.supplant(stockTemplate, data);
 
       // Populate UI
       stockTickers.insertBefore(div, firstDiv(stockTickers));
 
       // Update References
-      stock.box    = pubnub.$('stock-id-'     + ticker);
-      stock.name   = pubnub.$('stock-name-'   + ticker);
-      stock.time   = pubnub.$('stock-time-'   + ticker);
-      stock.price  = pubnub.$('stock-price-'  + ticker);
-      stock.delta  = pubnub.$('stock-delta-'  + ticker);
-      stock.perc   = pubnub.$('stock-perc-'   + ticker);
-      stock.vol    = pubnub.$('stock-vol-'    + ticker);
-      stock.switch = pubnub.$('stock-switch-' + ticker);
+      stock.box    = pubnubStocks.$('stock-id-'     + ticker);
+      stock.name   = pubnubStocks.$('stock-name-'   + ticker);
+      stock.time   = pubnubStocks.$('stock-time-'   + ticker);
+      stock.price  = pubnubStocks.$('stock-price-'  + ticker);
+      stock.delta  = pubnubStocks.$('stock-delta-'  + ticker);
+      stock.perc   = pubnubStocks.$('stock-perc-'   + ticker);
+      stock.vol    = pubnubStocks.$('stock-vol-'    + ticker);
+      stock.switch = pubnubStocks.$('stock-switch-' + ticker);
 
       $('#stock-switch-' + ticker).bootstrapSwitch().on('switchChange.bootstrapSwitch', function(event, state) {
         state ? enableStream(ticker) : disableStream(ticker);
@@ -110,7 +111,7 @@ $(function() {
     stock.perc.innerHTML  = '(' + data.perc + '%)';
     stock.vol.innerHTML   = 'Vol: ' + data.vol;
 
-    pubnub.css(stock.box, {
+    pubnubStocks.css(stock.box, {
       background: delta > 0 ? '#2ecc71' : '#e74c3c',
     });
   }
@@ -126,7 +127,7 @@ $(function() {
   }
 
   function disableStream(id) {
-    pubnub.css(pubnub.$('stock-id-' + id), { background: '#ecf0f1' });
+    pubnubStocks.css(pubnubStocks.$('stock-id-' + id), { background: '#ecf0f1' });
     disabledTickers.add(id);
   }
 
@@ -136,11 +137,9 @@ $(function() {
   //
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   function initializeChat() {
-    var pubnubChat  = PUBNUB.init({
+    var pubnubChat  = PUBNUB.init($.extend({
           noleave: true,
-          subscribe_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-          publish_key: 'demo',// jscs:ignore requireCamelCaseOrUpperCaseIdentifiers
-        }),
+        }, credentials)),
         input   = pubnubChat.$('chat-input'),
         output  = pubnubChat.$('chat-output'),
         cname   = pubnubChat.$('chat-name'),
@@ -213,8 +212,8 @@ $(function() {
   //
   // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   function initializeHistoryExample() {
-    pubnub.bind('mousedown,touchstart', loadHistoryBtn, function() {
-      pubnub.history({
+    pubnubStocks.bind('mousedown,touchstart', loadHistoryBtn, function() {
+      pubnubStocks.history({
         limit: 5,
         channel: 'MSFT',
         callback: function(msgs) {
@@ -248,10 +247,38 @@ $(function() {
         min = now.getMinutes(),
         hrs = now.getHours();
 
-    return pubnub.supplant('{hours}:{minutes}<sup>{pmam}</sup>', {
+    return pubnubStocks.supplant('{hours}:{minutes}<sup>{pmam}</sup>', {
       hours: zeropad(hrs > 12 ? (hrs - 12) || 1 : hrs || 1),
       minutes: zeropad(min),
       pmam: hrs > 11 ? 'pm' : 'am',
     });
   }
+
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  //
+  // Run initializers
+  //
+  // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  function initialize() {
+    initializeStock();
+    initializeChat();
+    initializeHistoryExample();
+  }
+
+  function main() {
+    $.get('get_configs.php')
+      .done(function(response) {
+        credentials = response;
+        initialize();
+      })
+      .fail(function(error) {
+        console.warn('Failed to fetch server-side configs. Falling back to the "demo/demo" keys');
+
+        credentials = { publish_key: 'demo', subscribe_key: 'demo' };
+        initialize();
+      });
+  }
+
+  main();
 });

@@ -23,21 +23,15 @@ date_default_timezone_set('America/New_York');
 setlocale(LC_MONETARY, "en_US");
 
 ## Capture Publish and Subscribe Keys from Command Line
-$publish_key   = isset($argv[7]) ? $argv[7]   : 'demo';
-$subscribe_key = isset($argv[8]) ? $argv[8]   : 'demo';
-$secret_key    = isset($argv[9]) ? $argv[9]   : false;
-$cipher_key    = isset($argv[10]) ? $argv[10] : false;
-$ssl_on        = false;
+$publish_key   = isset($argv[1]) ? $argv[1]   : 'demo';
+$subscribe_key = isset($argv[2]) ? $argv[2]   : 'demo';
 
 ## ---------------------------------------------------------------------------
 ## Create Pubnub Object
 ## ---------------------------------------------------------------------------
 $pubnub = new Pubnub\Pubnub(
     $publish_key,
-    $subscribe_key,
-    $secret_key,
-    $cipher_key,
-    $ssl_on
+    $subscribe_key
 );
 
 ## ---------------------------------------------------------------------------

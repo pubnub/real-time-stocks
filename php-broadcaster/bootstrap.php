@@ -7,11 +7,14 @@ require_once('../vendor/autoload.php');
 ## php ./bootstrap.php
 
 ## Capture Publish and Subscribe Keys from Command Line
-$publish_key   = isset($argv[7])  ? $argv[7]  : 'demo';
-$subscribe_key = isset($argv[8])  ? $argv[8]  : 'demo';
-$secret_key    = isset($argv[9])  ? $argv[9]  : false;
-$cipher_key    = isset($argv[10]) ? $argv[10] : false;
-$ssl_on        = false;
+$publish_key   = isset($argv[1])  ? $argv[1]  : 'demo';
+$subscribe_key = isset($argv[2])  ? $argv[2]  : 'demo';
+$secret_key    = isset($argv[3])  ? $argv[3]  : false;
+$auth_key      = isset($argv[4])  ? $argv[4] :  false;
+
+$group = "stockblast";
+$chat  = "stock-chat";
+$bootstrap_auth = $auth_key . "-bootstrap";
 
 ## ---------------------------------------------------------------------------
 ## Create Pubnub Object
@@ -19,15 +22,15 @@ $ssl_on        = false;
 $pubnub = new Pubnub\Pubnub(
     $publish_key,
     $subscribe_key,
-    $secret_key,
-    $cipher_key,
-    $ssl_on
+    $secret_key
 );
 
+$pubnub->setAuthKey($bootstrap_auth);
 ## ---------------------------------------------------------------------------
 ## Find all Streams running on this system
 ## ---------------------------------------------------------------------------
-$group = "stockblast";
+echo "Active stocks: ";
+
 $streams = system(implode( ' | ', array(
     'ps a',
     'grep stock.php',
@@ -36,10 +39,45 @@ $streams = system(implode( ' | ', array(
     'tr "\n+" ","'
 ) ));
 
+echo "\n";
+
+$channels = explode(",", trim($streams, ","));
+
+## ---------------------------------------------------------------------------
+## Grant permissions (will not work for a "demo/demo" credentials)
+## ---------------------------------------------------------------------------
+## To stocks channel group
+$response = $pubnub->pamGrantChannelGroup(1, 0, $group);
+validateResponse($response);
+
+## To current instance
+$response = $pubnub->pamGrantChannelGroup(0, 1, $group, $bootstrap_auth);
+validateResponse($response);
+
+## To chat
+$response = $pubnub->grant(1, 1, $chat, null, 5);
+validateResponse($response);
+
+## To stock tickers
+$response = $pubnub->grant(0, 1, join(",", $channels), $auth_key);
+validateResponse($response);
+
 ## ---------------------------------------------------------------------------
 ## Cleanup channel group and add current channels to it
 ## ---------------------------------------------------------------------------
-$channels = explode(",", trim($streams, ","));
+$response = $pubnub->channelGroupRemoveGroup($group);
+validateResponse($response);
 
-$pubnub->channelGroupRemoveGroup($group);
-$pubnub->channelGroupAddChannel($group, $channels);
+$response = $pubnub->channelGroupAddChannel($group, $channels);
+validateResponse($response);
+
+echo "\n";
+
+## ---------------------------------------------------------------------------
+## Helpers
+## ---------------------------------------------------------------------------
+function validateResponse($res) {
+    if (is_array($res) && in_array("error", $res) && $res["error"] == 1) {
+        echo $res["service"] . " response code " . $res["status"] . ": " . $res["message"] . "\n";
+    }
+}
