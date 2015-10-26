@@ -1,5 +1,4 @@
 #!/bin/bash
-. .env
 
 PUB=$PUBNUB_PUB_KEY
 SUB=$PUBNUB_SUB_KEY
