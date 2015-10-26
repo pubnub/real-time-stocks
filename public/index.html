@@ -204,8 +204,8 @@
                     <h2>PubNub - Class Instance</h2>
 <pre class="code">
 var pubnub = PUBNUB.init({
-subscribe_key : 'demo',
-publish_key   : 'demo'
+    subscribe_key : 'demo',
+    publish_key   : 'demo'
 });
 </pre>
                 </div>
@@ -259,8 +259,8 @@ publish_key   : 'demo'
                     <h3>PubNub - Open Multiplexed Stream</h3>
 <pre class="code">
 pubnub.subscribe({
-channel : ['MSFT', 'YHOO', 'ORCL'],
-message : receiver
+    channel : ['MSFT', 'YHOO', 'ORCL'],
+    message : receiver
 })
 </pre>
                 </div>
@@ -303,13 +303,13 @@ pubnub.unsubscribe({ channel : 'MSFT' })
                     <h3>PubNub - History</h3>
 <pre class="code">
 pubnub.history({
-limit    : 5,
-channel  : 'MSFT',
-callback : history_receiver
+    limit    : 5,
+    channel  : 'MSFT',
+    callback : history_receiver
 })
 
 function history_receiver(messages) {
-log_messages(messages);
+    log_messages(messages);
 }
 </pre>
                 </div>
