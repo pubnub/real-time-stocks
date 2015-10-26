@@ -14,6 +14,7 @@ $auth_key      = isset($argv[4])  ? $argv[4] :  false;
 
 $group = "stockblast";
 $chat  = "stock-chat";
+$history = "MSFT";
 $bootstrap_auth = $auth_key . "-bootstrap";
 
 ## ---------------------------------------------------------------------------
@@ -55,7 +56,11 @@ $response = $pubnub->pamGrantChannelGroup(0, 1, $group, $bootstrap_auth);
 validateResponse($response);
 
 ## To chat
-$response = $pubnub->grant(1, 1, $chat, null);
+$response = $pubnub->grant(1, 1, $chat);
+validateResponse($response);
+
+## To history
+$response = $pubnub->grant(1, 0, $history);
 validateResponse($response);
 
 ## To stock tickers
