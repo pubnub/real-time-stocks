@@ -23,16 +23,18 @@ date_default_timezone_set('America/New_York');
 setlocale(LC_MONETARY, "en_US");
 
 ## Capture Publish and Subscribe Keys from Command Line
-$publish_key   = isset($argv[1]) ? $argv[1]   : 'demo';
-$subscribe_key = isset($argv[2]) ? $argv[2]   : 'demo';
+$publish_key   = isset($argv[7]) ? $argv[7]   : 'demo';
+$subscribe_key = isset($argv[8]) ? $argv[8]   : 'demo';
+$auth_key      = isset($argv[9]) ? $argv[9]   : '';
 
 ## ---------------------------------------------------------------------------
 ## Create Pubnub Object
 ## ---------------------------------------------------------------------------
-$pubnub = new Pubnub\Pubnub(
-    $publish_key,
-    $subscribe_key
-);
+$pubnub = new Pubnub\Pubnub([
+    'publish_key' => $publish_key,
+    'subscribe_key' => $subscribe_key,
+    'auth_key' => $auth_key
+]);
 
 ## ---------------------------------------------------------------------------
 ## Define Stock Ticker Setup
