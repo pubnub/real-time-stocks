@@ -86,7 +86,7 @@ $(function() {
       });
 
       $('#stock-id-' + ticker).on('click', function() {
-        $('#stock-switch-' + ticker).click();
+        $('#stock-switch-' + ticker).bootstrapSwitch('toggleState');
       });
 
       // Set created value
