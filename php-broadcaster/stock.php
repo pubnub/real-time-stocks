@@ -83,6 +83,6 @@ while (1) {
     // This is because it is fake data anyway and
     // we want the stock price to run forever
     // randomly in a working demo state.
-    if (abs($perc) > $maxDelta) $currPrice = $sPrice;
+    if (abs($perc) > ($maxDelta / 100)) $currPrice = $sPrice;
     usleep($slptime);
 }
