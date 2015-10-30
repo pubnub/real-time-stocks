@@ -1,0 +1,23 @@
+{
+  "name": "real-time-stocks",
+  "homepage": "https://github.com/pubnub/real-time-stocks",
+  "description": "Real-time Stocks with PHP and JavaScript",
+  "keywords": [
+    "pubnub",
+    "realtime"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "flat-ui": "~2.2.2",
+    "bootstrap": "~3.3.5",
+    "jquery": "~2.1.4",
+    "bootstrap-switch": "~3.3.2"
+  }
+}

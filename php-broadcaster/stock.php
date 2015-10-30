@@ -1,5 +1,5 @@
 <?php
-require_once('Pubnub.php');
+require_once('../vendor/autoload.php');
 
 ## ---------------------------------------------------------------------------
 ## STANDARD USAGE
@@ -25,20 +25,16 @@ setlocale(LC_MONETARY, "en_US");
 ## Capture Publish and Subscribe Keys from Command Line
 $publish_key   = isset($argv[7]) ? $argv[7]   : 'demo';
 $subscribe_key = isset($argv[8]) ? $argv[8]   : 'demo';
-$secret_key    = isset($argv[9]) ? $argv[9]   : false;
-$cipher_key    = isset($argv[10]) ? $argv[10] : false;
-$ssl_on        = false;
+$auth_key      = isset($argv[9]) ? $argv[9]   : '';
 
 ## ---------------------------------------------------------------------------
 ## Create Pubnub Object
 ## ---------------------------------------------------------------------------
-$pubnub = new Pubnub(
-    $publish_key,
-    $subscribe_key,
-    $secret_key,
-    $cipher_key,
-    $ssl_on
-);
+$pubnub = new Pubnub\Pubnub([
+    'publish_key' => $publish_key,
+    'subscribe_key' => $subscribe_key,
+    'auth_key' => $auth_key
+]);
 
 ## ---------------------------------------------------------------------------
 ## Define Stock Ticker Setup
@@ -76,10 +72,7 @@ while (1) {
         "vol"   => $vol
     );
 
-    $publish_success = $pubnub->publish(array(
-        'channel' => $channel,
-        'message' => $stream
-    ));
+    $publish_success = $pubnub->publish($channel, $stream);
 
     echo($t . " " . $publish_success[0] . " " . $publish_success[1]);
     echo("\r\n");
@@ -90,8 +83,6 @@ while (1) {
     // This is because it is fake data anyway and
     // we want the stock price to run forever
     // randomly in a working demo state.
-    if (abs($perc) > $maxDelta) $currPrice = $sPrice;
+    if (abs($perc) > ($maxDelta / 100)) $currPrice = $sPrice;
     usleep($slptime);
 }
-
-?>

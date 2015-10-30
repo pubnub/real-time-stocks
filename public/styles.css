@@ -115,6 +115,8 @@ a.github-link:active {
 .code {
     font-size: 11px;
     line-height: 16px;
+    color: #000000;
+    text-transform: none;
 }
 .general-description {
     margin: 20px;
@@ -168,6 +170,44 @@ a.github-link:active {
 }
 
 /* ======================================================================= */
-/* PANEL: NEW | LOAD
+/* OVERRIDES
 /* ======================================================================= */
+body {
+    font-size: 14px;
+}
 
+h1 {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 26px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 18px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+p {
+    font-size: 14px;
+}
+
+.palette {
+    text-transform: none;
+}
+
+.navbar a {
+    color: #ffffff;
+}
+
+.navbar a:hover {
+    color: #16a085;
+}
