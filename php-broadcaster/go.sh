@@ -2,6 +2,8 @@
 
 # Use ". .env" command to load environment variables from .env file or export them manually
 
+. .env
+
 PUB=$PUBNUB_PUB_KEY
 SUB=$PUBNUB_SUB_KEY
 AUTH=$PUBNUB_AUTH_KEY
